@@ -22,7 +22,7 @@ Long description coming soon.
 
 == Frequently Asked Questions ==
 = Can I make suggestions or requests? =
-Yes please! If you have a use case, please don't hesitate to reach out, it's best to [open an issue on Github]().
+Yes please! If you have a use case, please don't hesitate to reach out, it's best to [open an issue on Github](https://github.com/n8finch/my-reads/issues/).
 
 == Screenshots ==
 1. A screenshot of a single post display.
