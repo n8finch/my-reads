@@ -1,0 +1,29 @@
+{
+  "preset": "psr12",
+  "rules": {
+    "array_indentation": true,
+    "array_syntax": true,
+    "braces_position": {
+      "allow_single_line_anonymous_functions": false,
+      "classes_opening_brace": "same_line",
+      "control_structures_opening_brace": "same_line",
+      "functions_opening_brace": "same_line"
+    },
+    "concat_space": {
+      "spacing": "one"
+    },
+    "declare_equal_normalize": {
+      "space": "single"
+    },
+    "echo_tag_syntax": {
+      "format": "long",
+      "long_function": "echo"
+    },
+    "indentation_type": true,
+    "spaces_inside_parentheses": {
+      "space": "single"
+    }
+  },
+  "exclude": ["vendor", "node_modules", "wp-admin", "wp-includes"],
+  "notName": ["*.min.js", "*.min.css", "index.asset.php"]
+}

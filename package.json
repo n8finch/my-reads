@@ -1,0 +1,39 @@
+{
+	"name": "my-reads",
+	"version": "0.2.0",
+	"title": "My Reads",
+	"description": "A collection of blocks for displaying a list of books, audiobooks, articles, etc. that you are reading or have read.",
+	"author": "Nate Finch",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"start": "wp-scripts start --webpack-src-dir=blocks",
+		"build": "wp-scripts build --webpack-src-dir=blocks",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip"
+	},
+	"files": [
+		"blocks",
+		"build",
+		"includes",
+		"patterns",
+    "screenshots",
+		"templates",
+		"my-reads.php",
+		"README.md",
+		"readme.txt",
+    "webpack.config.js"
+	],
+	"devDependencies": {
+		"@wordpress/scripts": "^27.2.0"
+	},
+	"dependencies": {
+		"@10up/block-components": "^1.20.0",
+		"@wordpress/components": "^28.11.0",
+		"@wordpress/icons": "^10.11.0",
+		"webpack-remove-empty-scripts": "^1.0.4"
+	}
+}

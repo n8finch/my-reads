@@ -1,0 +1,12 @@
+parameters:
+	reportUnmatchedIgnoredErrors: false
+	level: 3
+	paths:
+		- includes
+		- patterns
+		- templates
+	excludePaths:
+		- node_modules
+		- vendor
+	ignoreErrors:
+		- "#^Function get_field not found\\.$#"

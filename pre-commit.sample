@@ -1,0 +1,48 @@
+#!/bin/sh
+# Get changed files.
+files=$(git prune && git fetch origin master && git diff --name-only --diff-filter=d origin/master)
+
+# Separate PHP and web files.
+php_files=$(echo "$files" | grep -E '\.php$')
+web_files=$(echo "$files" | grep -E '\.(html|css|scss|js)$')
+js_files=$(echo "$files" | grep -E '\.(js)$')
+
+# Exit if no PHP or web files found.
+if [ -z "$web_files" ] && [ -z "$php_files" ]; then
+    echo "No PHP or web files found. Exiting..."
+    exit 0
+fi
+
+# Run Prettier and ESLint checks on web files.
+if [ -n "$web_files" ]; then
+	# Run Prettier check
+	npm run format $web_files
+	prettier_exit_code=$?
+
+	# Run ESLint
+	npm run lint --no-ignore $js_files
+	eslint_exit_code=$?
+else
+	echo "No web files found."
+fi
+
+# Run Pint and PHPStan checks on PHP files.
+if [ -n "$php_files" ]; then
+	# Run Pint
+	composer run pint $php_files
+	pint_exit_code=$?
+
+	# Run PHPStan check
+	composer run phpstan $php_files
+	phpstan_exit_code=$?
+else
+	echo "No PHP files found."
+fi
+
+# Exit if either ESLint or Prettier check fails
+if [ $eslint_exit_code -ne 0 ] || [ $prettier_exit_code -ne 0 ] || [ $pint_exit_code -ne 0 ] || [ $phpstan_exit_code -ne 0 ]; then
+	echo "Linting or formatting issues found. Please fix before committing."
+	exit 1
+fi
+
+exit 0

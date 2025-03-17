@@ -1,0 +1,32 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "my-reads/media-format",
+	"version": "0.2.0",
+	"title": "Media Format",
+	"category": "my-reads",
+	"icon": "question",
+	"description": "A block to display the media format of a read (book, article, audiobook, etc.).",
+	"supports": {
+		"html": false,
+		"multiple": false
+	},
+	"textdomain": "my-reads",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"usesContext": [ "postId", "postType" ],
+	"attributes": {
+		"format": {
+			"type": "string",
+			"default": "book"
+		}
+	},
+	"example": {
+		"attributes": {
+			"format": "book"
+		}
+	},
+	"keywords": [ "format", "my reads" ]
+}

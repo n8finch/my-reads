@@ -1,0 +1,145 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-create-block-my-reads-filter {
+  background-color: #eee;
+  color: #333;
+  padding: 2px;
+}
+
+#my-reads-filter {
+  input {
+    width: 90%;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+}
+
+.year-section {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  h2 {
+    margin-right: 2rem;
+  }
+}
+
+.postItem-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+
+  &.row {
+    display: block;
+  }
+
+  .image-wrapper {
+    position: relative;
+    max-width: 150px;
+    margin-right: 2rem;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    .favorite-badge {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 100%;
+      border: 1px solid #333;
+      height: 36px;
+      width: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .content-wrapper {
+    max-width: 460px;
+
+    a {
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    h2,
+    p {
+      margin-bottom: 1rem;
+      margin-top: 0;
+    }
+  }
+}
+
+.postListByYear-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  grid-gap: 1.5em;
+
+  h3 {
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+  }
+}
+.excerpt-container {
+  position: relative;
+  display: inline-block;
+
+  .excerpt-link {
+    text-decoration: underline;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    &:hover + .excerpt-popup {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .excerpt-popup {
+    opacity: 0;
+    visibility: hidden;
+    background-color: #eee;
+    border: 1px solid #333;
+    line-height: 1.5;
+    padding: 1rem;
+    position: absolute;
+    filter: drop-shadow(0 0.5rem 0.5rem rgb(0 0 0 / 0.4));
+    width: 175px;
+    max-width: 400px;
+    transition:
+      opacity 0.3s ease-in-out,
+      visibility 0.3s ease-in-out;
+    z-index: 9;
+    p {
+      font-size: 0.8rem;
+      margin: 0;
+    }
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+}

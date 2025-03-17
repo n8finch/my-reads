@@ -1,0 +1,37 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "my-reads/star-rating",
+	"version": "0.2.0",
+	"title": "Star Rating",
+	"category": "my-reads",
+	"icon": "star-filled",
+	"description": "A block to display a star rating.",
+	"supports": {
+		"html": false,
+		"multiple": false
+	},
+	"textdomain": "my-reads",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"usesContext": [ "postId", "postType" ],
+	"attributes": {
+		"rating": {
+			"type": "number",
+			"default": 5
+		},
+		"ratingStyle": {
+			"type": "string",
+			"default": "star"
+		}
+	},
+	"example": {
+		"attributes": {
+			"rating": 3,
+			"ratingStyle": "star"
+		}
+	},
+	"keywords": [ "star", "rating" ]
+}
