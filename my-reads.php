@@ -6,7 +6,7 @@
  * Description:       A plugin to allow users to track their reading list.
  * Requires at least: 6.7
  * Requires PHP:      7.4
- * Version:           0.2.0
+ * Version:           0.2.1
  * Author:            Nate Finch
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html

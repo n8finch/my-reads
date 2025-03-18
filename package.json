@@ -1,6 +1,6 @@
 {
 	"name": "my-reads",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"title": "My Reads",
 	"description": "A collection of blocks for displaying a list of books, audiobooks, articles, etc. that you are reading or have read.",
 	"author": "Nate Finch",
