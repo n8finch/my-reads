@@ -100,15 +100,23 @@
   display: inline-block;
 
   .excerpt-link {
-    text-decoration: underline;
     font-size: 1rem;
     cursor: pointer;
     display: flex;
     align-items: center;
 
-    &:hover + .excerpt-popup {
-      opacity: 1;
-      visibility: visible;
+    svg {
+      transition: transform 0.2s ease-in-out;
+    }
+
+    &:hover {
+      svg {
+        transform: rotate(90deg);
+      }
+      & + .excerpt-popup {
+        opacity: 1;
+        visibility: visible;
+      }
     }
   }
 

@@ -94,9 +94,9 @@ const PostItem = ( { post, layout, useAmazonLink } ) => {
 						) }
 						{ layout === 'row' && (
 							<div className="excerpt-container">
-								<a href="#" className="excerpt-link">
+								<span className="excerpt-link">
 									<Icon icon={ chevronRight } /> Quick thought
-								</a>
+								</span>
 								<div className="excerpt-popup">
 									<p
 										dangerouslySetInnerHTML={ {
