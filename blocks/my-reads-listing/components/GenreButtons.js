@@ -36,13 +36,13 @@ const GenreButtons = ({ posts, onFilterChange }) => {
   return (
     <div className='genre-buttons'>
       <button
-        className={`wp-element-button "${activeGenre === 'All' ? 'active' : ''}`}
+        className={`wp-element-button ${activeGenre === 'All' ? 'active' : ''}`}
         onClick={() => handleClick('All')}>
         {__('All', 'my-reads')} ({allCount})
       </button>
 
       <button
-        className={`wp-element-button "${activeGenre === 'Favorites' ? 'active' : ''}`}
+        className={`wp-element-button ${activeGenre === 'Favorites' ? 'active' : ''}`}
         onClick={() => handleClick('Favorites')}>
         {__('Favorites', 'my-reads')} ({favoritesCount})
       </button>
@@ -50,7 +50,7 @@ const GenreButtons = ({ posts, onFilterChange }) => {
       {genreButtons.map(({ genre, count }) => (
         <button
           key={genre}
-          className={`wp-element-button "${activeGenre === genre ? 'active' : ''}`}
+          className={`wp-element-button ${activeGenre === genre ? 'active' : ''}`}
           onClick={() => handleClick(genre)}>
           {__(genre, 'my-reads')} ({count})
         </button>

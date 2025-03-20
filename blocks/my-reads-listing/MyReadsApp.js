@@ -49,18 +49,24 @@ const MyReadsFilterApp = ({ attributes }) => {
     );
   };
 
+  const getBaseFilteredPosts = () => {
+    return Object.values(postsJSON).flat();
+  };
+
   // This callback will update your filtering logic based on the active genre.
   const handleFilterChange = (selectedGenre) => {
     setGenreFilter(selectedGenre);
     // You can adjust your filtering here (for instance, if 'Favorites', filter posts by favorites,
     // or if a specific genre, filter posts whose `genres` include that genre)
     if (selectedGenre === 'All') {
-      setPostsArray(Object.values(postsJSON).flat()); // Reset to all posts
+      setPostsArray(getBaseFilteredPosts()); // Reset to all posts
     } else if (selectedGenre === 'Favorites') {
-      setPostsArray(postsArray.filter((post) => post._my_reads_isFavorite));
+      setPostsArray(
+        getBaseFilteredPosts().filter((post) => post._my_reads_isFavorite)
+      );
     } else {
       setPostsArray(
-        postsArray.filter((post) => post.genres.includes(selectedGenre))
+        getBaseFilteredPosts().filter((post) => post.genres.includes(selectedGenre))
       );
     }
   };
@@ -68,7 +74,7 @@ const MyReadsFilterApp = ({ attributes }) => {
   return (
     <>
       <GenreButtons
-        posts={getFilteredPosts()}
+        posts={getBaseFilteredPosts()}
         onFilterChange={handleFilterChange}
       />
       <SearchForm
