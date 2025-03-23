@@ -8,6 +8,7 @@
  * Requires PHP:      7.4
  * Version:           0.2.1
  * Author:            Nate Finch
+ * Author URI:        https://n8finch.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       my-reads
