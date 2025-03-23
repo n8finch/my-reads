@@ -94,7 +94,7 @@ class Get_All_Reads_Endpoint {
                     '_my_reads_format' => get_post_meta( $post_id, '_my_reads_format', true ) ?? 'book',
                     '_my_reads_amazonLink' => get_post_meta( $post_id, '_my_reads_amazonLink', true ) ?? '',
                     'excerpt'         => get_the_excerpt(),
-                    'featured_image'  => $featured_image ? str_replace( site_url(), '', $featured_image ): '',
+                    'featured_image'  => $featured_image ? str_replace( site_url(), '', $featured_image ) : '',
                     'year'             => $year,
                     'permalink'       => str_replace( site_url(), '', get_permalink( $post_id ) ),
                     'genres'          => wp_get_post_terms( $post_id, 'my_reads_genre', ["fields" => "names"] ),

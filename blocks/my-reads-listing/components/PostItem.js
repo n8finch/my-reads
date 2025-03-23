@@ -80,7 +80,8 @@ const PostItem = ( { post, layout, useAmazonLink } ) => {
 							);
 						} ) }
 					</em>
-				</small><br/>
+				</small>
+				<br />
 				{ post.excerpt && (
 					<>
 						{ layout === 'list' && (

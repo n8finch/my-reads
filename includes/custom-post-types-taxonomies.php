@@ -199,11 +199,11 @@ class My_Reads_CPT {
                   <option value="">All <?php echo esc_html( $tax_name ) ?></option>
                   <?php
                     foreach ( $terms as $term ) {
-                    // output each select option line, check against the last $_GET to show the current option selected
-                    ?>
+                        // output each select option line, check against the last $_GET to show the current option selected
+                        ?>
                     <option value="<?php echo esc_attr( $term->slug ) ?>" <?php echo esc_attr( $current_v === $term->slug ? ' selected="selected"' : '' ) ?> ><?php echo esc_attr( $term->name ) ?> ( <?php echo esc_attr( $term->count ) ?> )</option>
                     <?php
-                }?>
+                    }?>
                 </select>
                 <?php
             }

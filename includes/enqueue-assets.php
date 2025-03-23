@@ -19,15 +19,15 @@ class My_Add_Assets {
      * Enqueue admin scripts and styles for settings page.
      */
     public function enqueue_admin_settings_scripts() {
-      // Enqueue script for the settings page.
-      if ( isset( $_GET['page'] ) && $_GET['page'] === 'my-reads-cpt-settings' ) {
-          wp_enqueue_script( 'my-reads-settings', MY_READS_URL . '/includes/js/admin-my-reads-settings-page.js', [], false, true );
+        // Enqueue script for the settings page.
+        if ( isset( $_GET['page'] ) && $_GET['page'] === 'my-reads-cpt-settings' ) {
+            wp_enqueue_script( 'my-reads-settings', MY_READS_URL . '/includes/js/admin-my-reads-settings-page.js', [], false, true );
 
-          // Add in extra data for the settings page.
-          wp_localize_script( 'my-reads-settings', 'MYREADS_SETTINGS', array(
-            'allTheReads' => esc_url( site_url( '/wp-json/my-reads/v1/all-the-reads/?refresh=true' ) )
-        ) );
-      }
+            // Add in extra data for the settings page.
+            wp_localize_script( 'my-reads-settings', 'MYREADS_SETTINGS', [
+                'allTheReads' => esc_url( site_url( '/wp-json/my-reads/v1/all-the-reads/?refresh=true' ) )
+            ] );
+        }
     }
 
     /**
