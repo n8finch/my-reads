@@ -153,28 +153,6 @@ class My_Reads_Settings {
         <button id="regenerate-json-btn" class="button button-primary">
             Regenerate My Reads JSON
         </button>
-        <script>
-        document.getElementById('regenerate-json-btn').addEventListener('click', function() {
-            const apiUrl = '<?php echo esc_url( site_url( '/wp-json/my-reads/v1/all-the-reads/?refresh=true' ) ); ?>';
-
-            fetch(apiUrl, {
-                method: 'GET',  // Adjust the method based on what your endpoint expects
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-WP-Nonce': '<?php echo esc_attr( wp_create_nonce( 'wp_rest' ) ); ?>' // Ensures security if needed
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('JSON Regeneration Complete!');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error occurred while regenerating JSON.');
-            });
-        });
-        </script>
         <br/>
         <br/>
         <hr/>
