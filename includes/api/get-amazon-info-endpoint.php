@@ -12,20 +12,19 @@ class Get_Amazon_Info_Endpoint {
         register_rest_route( 'my-reads/v1', '/fetch-amazon-data', [
             'methods' => 'POST',
             'callback' => [ $this, 'my_reads_fetch_amazon_data' ],
-            'permission_callback' => current_user_can( 'edit_posts' ),
+            'permission_callback' => function() {
+              return current_user_can( 'edit_posts' );
+            }
         ] );
     }
 
-    public function my_reads_fetch_amazon_data() {
-        $request_body = file_get_contents( 'php://input' );
-        $data = json_decode( $request_body, true ); // Decode JSON to associative array
-
-        if ( empty( $data['url'] ) ) {
+    public function my_reads_fetch_amazon_data( $request ) {
+        if ( empty( $request['url'] ) ) {
             wp_send_json_error( ['error' => 'Amazon URL is required.'] );
             return;
         }
 
-        $amazon_url = esc_url_raw( $data['url'] );
+        $amazon_url = esc_url_raw( $request['url'] );
 
         // Fetch the Amazon page HTML
         $response = wp_remote_get( $amazon_url );

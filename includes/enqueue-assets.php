@@ -57,6 +57,11 @@ class My_Add_Assets {
             $asset_file['version']
         );
         wp_enqueue_script( 'slotfill-my-reads' );
+
+        // Localize script for passing data to JS.
+        wp_localize_script( 'slotfill-my-reads', 'MYREADS_CPT', [
+            'nonce' => wp_create_nonce( 'wp_rest' ),
+        ] );
     }
 
     public function my_reads_default_featured_image( $html, $post_id, $post_thumbnail_id, $size, $attr ) {

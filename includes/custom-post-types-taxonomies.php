@@ -191,7 +191,7 @@ class My_Reads_CPT {
 
                 // retrieve array of term objects per taxonomy
                 $terms = get_terms( $tax_slug );
-                $current_v = isset( $_GET[$tax_slug] ) ? sanitize_text_field( $_GET[$tax_slug] ) : '';
+                $current_v = isset( $_GET[$tax_slug] ) ? sanitize_text_field( wp_unslash( $_GET[$tax_slug] ) ) : '';
 
                 // Output html for taxonomy dropdown filter.
                 ?>

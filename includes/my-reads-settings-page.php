@@ -61,8 +61,9 @@ class My_Reads_Settings {
             $uploaded_file = $_FILES['my_reads_csv_file'];
 
             // Check if file is a CSV
-            if ( strtolower( pathinfo( $uploaded_file['name'], PATHINFO_EXTENSION ) ) !== 'csv' ) {
-                wp_die( 'Only CSV files are allowed.' );
+            $file_type = wp_check_filetype( $uploaded_file['name'] );
+            if ( $file_type['ext'] !== 'csv' ) {
+                wp_die( __( 'Invalid file type. Only CSV files are allowed.', 'my-reads' ) );
             }
 
             // Move the uploaded file to the WordPress uploads directory
