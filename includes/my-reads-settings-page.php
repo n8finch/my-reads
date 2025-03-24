@@ -8,6 +8,7 @@ class My_Reads_Settings {
         add_action( 'custom_menu_order', [ $this, 'my_reads_cpt_settings_menu_order' ] );
         add_action( 'admin_init', [ $this, 'my_reads_register_settings' ] );
         add_action( 'admin_notices', [ $this, 'my_reads_admin_notice' ] );
+        add_action( 'admin_init', [ $this, 'my_reads_download_csv' ] );
     }
 
     /**
@@ -61,7 +62,7 @@ class My_Reads_Settings {
         // Verify the nonce for file upload.
         if ( ! isset( $_POST['my_reads_csv_file_nonce'] ) || 
             ! wp_verify_nonce( $_POST['my_reads_csv_file_nonce'], 'my_reads_csv_file_action' ) ) {
-            wp_die( __( 'Security check failed.', 'textdomain' ) );
+            wp_die( __( 'Security check failed.', 'my-reads' ) );
         }
 
         // Check if the file is empty or not readable.
@@ -151,6 +152,75 @@ class My_Reads_Settings {
     }
 
     /**
+     * my_reads_download_csv
+     *
+     * @return void
+     */
+    public function my_reads_download_csv() {
+      if ( isset( $_GET['action'] ) && $_GET['action'] === 'download_my_reads_csv' ) {
+          if ( ! current_user_can( 'manage_options' ) ) {
+              wp_die( __( 'You do not have permission to download this file.', 'textdomain' ) );
+          }
+  
+          // Set CSV Headers
+          header( 'Content-Type: text/csv; charset=utf-8' );
+          header( 'Content-Disposition: attachment; filename=my-reads.csv' );
+  
+          // Open output stream for writing CSV
+          $output = fopen( 'php://output', 'w' );
+  
+          // Add CSV Header Row with DB column names & meta keys
+          fputcsv( $output, [
+              'ID', 
+              'post_title', 
+              // 'post_content', 
+              'post_excerpt',
+              '_my_reads_author', 
+              '_my_reads_format', 
+              '_my_reads_rating', 
+              '_my_reads_ratingStyle', 
+              '_my_reads_isFavorite', 
+              '_my_reads_amazonLink'
+          ]);
+  
+          // Fetch My Reads Posts
+          $args = [
+              'post_type'      => 'my_reads',
+              'posts_per_page' => -1,
+              'post_status'    => 'publish',
+          ];
+          $query = new WP_Query( $args );
+  
+          if ( $query->have_posts() ) {
+              while ( $query->have_posts() ) {
+                  $query->the_post();
+                  
+                  // Get post data and meta
+                  $row = [
+                      get_the_ID(),
+                      get_the_title(),
+                      // wp_strip_all_tags( get_the_content() ),
+                      wp_strip_all_tags( get_the_excerpt() ),
+                      get_post_meta( get_the_ID(), '_my_reads_author', true ),
+                      get_post_meta( get_the_ID(), '_my_reads_format', true ),
+                      get_post_meta( get_the_ID(), '_my_reads_rating', true ),
+                      get_post_meta( get_the_ID(), '_my_reads_ratingStyle', true ),
+                      get_post_meta( get_the_ID(), '_my_reads_isFavorite', true ),
+                      get_post_meta( get_the_ID(), '_my_reads_amazonLink', true ),
+                  ];
+  
+                  // Write row to CSV
+                  fputcsv( $output, $row );
+              }
+              wp_reset_postdata();
+          }
+  
+          fclose( $output ); // Close output stream
+          exit; // Stop further execution
+      }
+    }
+
+    /**
      * My Reads CPT settings submenu page HTML
      * @return void
      */
@@ -187,7 +257,13 @@ class My_Reads_Settings {
           </table>
           <?php submit_button( 'Upload file' ); ?>
         </form>
-
+        <br/>
+        <hr/>
+        <h2>Download CSV for My Reads</h2>
+        <form method="get" action="">
+            <input type="hidden" name="action" value="download_my_reads_csv">
+            <?php submit_button( 'Download CSV' ); ?>
+        </form>
     </div>
         <?php
     }

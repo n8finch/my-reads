@@ -13,6 +13,7 @@ class My_Reads_Register_Meta {
      */
     public function register_my_reads_post_meta() {
         $post_meta = [
+            '_my_reads_author' => [ 'type' => 'string', 'default' => '' ],
             '_my_reads_format' => [ 'type' => 'string', 'default' => 'book' ],
             '_my_reads_rating' => [ 'type' => 'number', 'default' => 3.5 ],
             '_my_reads_ratingStyle' => [ 'type' => 'string', 'default' => 'star' ],
