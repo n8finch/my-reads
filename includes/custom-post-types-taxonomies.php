@@ -191,9 +191,9 @@ class My_Reads_CPT {
 
                 // retrieve array of term objects per taxonomy
                 $terms = get_terms( $tax_slug );
-                $current_v = isset( $_GET[$tax_slug] ) ? $_GET[$tax_slug] : '';
+                $current_v = isset( $_GET[$tax_slug] ) ? sanitize_text_field( $_GET[$tax_slug] ) : '';
 
-                // output html for taxonomy dropdown filter
+                // Output html for taxonomy dropdown filter.
                 ?>
                 <select name="<?php echo esc_attr( $tax_slug ) ?>" id="<?php esc_attr( $tax_slug ) ?>" class="postform">
                   <option value="">All <?php echo esc_html( $tax_name ) ?></option>

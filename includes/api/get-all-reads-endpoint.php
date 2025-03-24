@@ -18,18 +18,20 @@ class Get_All_Reads_Endpoint {
             '/all-the-reads',
             [
                 'methods' => 'GET',
-                'callback' => [ $this, 'get_all_the_reads' ],
-                'permission_callback' => '__return_true',
+                'callback' => [ $this, 'myreads_get_all_the_reads' ],
+                'permission_callback' => function() {
+                  return current_user_can( 'edit_posts' );
+                },
             ]
         );
     }
 
     /**
-     * get_all_the_reads
+     * myreads_get_all_the_reads
      *
      * @return object
      */
-    public function get_all_the_reads( WP_REST_Request $request ) {
+    public function myreads_get_all_the_reads( WP_REST_Request $request ) {
         // Get the 'refresh' parameter from the request
         $refresh = $request->get_param( 'refresh' );
         // If 'refresh' is set to true, create a new file.

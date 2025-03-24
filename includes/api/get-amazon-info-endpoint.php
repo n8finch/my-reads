@@ -5,11 +5,6 @@ class Get_Amazon_Info_Endpoint {
     public $all_reads_file = '';
 
     public function __construct() {
-        // $upload_dir = wp_upload_dir();
-        // $this->all_reads_file = trailingslashit( $upload_dir['basedir'] ) . 'all-the-reads.json';
-        // // Create a WP REST API endpoint for all the posts.
-        // add_action( 'rest_api_init', [ $this, 'create_all_reads_endpoint' ] );
-
         add_action( 'rest_api_init', [ $this, 'register_my_reads_fetch_amazon_data_route' ] );
     }
 
@@ -17,7 +12,7 @@ class Get_Amazon_Info_Endpoint {
         register_rest_route( 'my-reads/v1', '/fetch-amazon-data', [
             'methods' => 'POST',
             'callback' => [ $this, 'my_reads_fetch_amazon_data' ],
-            'permission_callback' => '__return_true',
+            'permission_callback' => current_user_can( 'edit_posts' ),
         ] );
     }
 
