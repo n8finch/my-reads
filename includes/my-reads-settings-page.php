@@ -48,6 +48,8 @@ class My_Reads_Settings {
     // Register the setting
     public function my_reads_register_settings() {
         register_setting( 'my_reads_settings_group', 'my_reads_csv_file', [
+            'type' => 'string',
+            'description' => 'CSV file for My Reads',
             'sanitize_callback' => [ $this, 'my_reads_file_upload' ]
         ] );
     }
@@ -107,8 +109,8 @@ class My_Reads_Settings {
 
             // Create a new post (for "my_reads" post type)
             $post_data = [
-                'post_title'   => $title,
-                'post_content' => $this->generate_post_content( $author ), // Custom content formatting function
+                'post_title'   => sanitize_text_field( $title ),
+                'post_content' => wp_kses_post( $this->generate_post_content( $author ) ),
                 'post_type'    => 'my_reads',
                 'post_status'  => 'publish',
             ];
@@ -119,17 +121,17 @@ class My_Reads_Settings {
             // If post creation succeeded, proceed with adding meta and taxonomies
             if ( !is_wp_error( $post_id ) ) {
                 // Add format meta
-                update_post_meta( $post_id, '_my_reads_format', $format );
+                update_post_meta( $post_id, '_my_reads_format', sanitize_text_field( $format ) );
 
                 // Add rating meta
-                update_post_meta( $post_id, '_my_reads_rating', $rating );
+                update_post_meta( $post_id, '_my_reads_rating', sanitize_text_field(  $rating ) );
                 update_post_meta( $post_id, '_my_reads_ratingStyle', 'star' ); // Default rating style
 
                 // Mark as not favorite by default
                 update_post_meta( $post_id, '_my_reads_isFavorite', false );
 
                 // Add Year taxonomy (use the Year as the term slug)
-                wp_set_object_terms( $post_id, $year, 'my_reads_year' );
+                wp_set_object_terms( $post_id, sanitize_text_field( $year ), 'my_reads_year' );
             }
         }
 
@@ -158,9 +160,9 @@ class My_Reads_Settings {
         <hr/>
         <h2>Upload CSV for My Reads</h2>
         <form method="post" action="options.php" enctype="multipart/form-data">
-          <?php
-            settings_fields( 'my_reads_settings_group' );
-        do_settings_sections( 'my_reads_settings' );
+        <?php
+          settings_fields( 'my_reads_settings_group' );
+          do_settings_sections( 'my_reads_settings' );
         ?>
           <table class="form-table">
             <tr valign="top">
