@@ -1,6 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+} // Exit if accessed directly
 
 class Get_All_Reads_Endpoint {
     // Define the path to the JSON file.
@@ -21,8 +23,8 @@ class Get_All_Reads_Endpoint {
             [
                 'methods' => 'GET',
                 'callback' => [ $this, 'myreads_get_all_the_reads' ],
-                'permission_callback' => function() {
-                  return current_user_can( 'edit_posts' );
+                'permission_callback' => function () {
+                    return current_user_can( 'edit_posts' );
                 },
             ]
         );

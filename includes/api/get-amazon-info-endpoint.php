@@ -1,6 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+} // Exit if accessed directly
 
 class Get_Amazon_Info_Endpoint {
     // Define the path to the JSON file.
@@ -14,8 +16,8 @@ class Get_Amazon_Info_Endpoint {
         register_rest_route( 'my-reads/v1', '/fetch-amazon-data', [
             'methods' => 'POST',
             'callback' => [ $this, 'my_reads_fetch_amazon_data' ],
-            'permission_callback' => function() {
-              return current_user_can( 'edit_posts' );
+            'permission_callback' => function () {
+                return current_user_can( 'edit_posts' );
             }
         ] );
     }

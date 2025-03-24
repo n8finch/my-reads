@@ -1,6 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+} // Exit if accessed directly
 
 class My_Reads_Settings {
     public function __construct() {
@@ -60,14 +62,14 @@ class My_Reads_Settings {
     // Handle the file upload
     public function my_reads_file_upload( $file ) {
         // Verify the nonce for file upload.
-        if ( ! isset( $_POST['my_reads_csv_file_nonce'] ) || 
+        if ( ! isset( $_POST['my_reads_csv_file_nonce'] ) ||
             ! wp_verify_nonce( $_POST['my_reads_csv_file_nonce'], 'my_reads_csv_file_action' ) ) {
             wp_die( __( 'Security check failed.', 'my-reads' ) );
         }
 
         // Check if the file is empty or not readable.
         if ( empty( $_FILES['my_reads_csv_file']['name'] ) ) {
-           wp_die( esc_html( __( 'The file is not readable.', 'my-reads' ) ) );
+            wp_die( esc_html( __( 'The file is not readable.', 'my-reads' ) ) );
         }
 
         // Use WordPress's file upload functionality
@@ -137,7 +139,7 @@ class My_Reads_Settings {
                 update_post_meta( $post_id, '_my_reads_format', sanitize_text_field( $format ) );
 
                 // Add rating meta
-                update_post_meta( $post_id, '_my_reads_rating', sanitize_text_field(  $rating ) );
+                update_post_meta( $post_id, '_my_reads_rating', sanitize_text_field( $rating ) );
                 update_post_meta( $post_id, '_my_reads_ratingStyle', 'star' ); // Default rating style
 
                 // Mark as not favorite by default
@@ -157,67 +159,67 @@ class My_Reads_Settings {
      * @return void
      */
     public function my_reads_download_csv() {
-      if ( isset( $_GET['action'] ) && $_GET['action'] === 'download_my_reads_csv' ) {
-          if ( ! current_user_can( 'manage_options' ) ) {
-              wp_die( __( 'You do not have permission to download this file.', 'textdomain' ) );
-          }
-  
-          // Set CSV Headers
-          header( 'Content-Type: text/csv; charset=utf-8' );
-          header( 'Content-Disposition: attachment; filename=my-reads.csv' );
-  
-          // Open output stream for writing CSV
-          $output = fopen( 'php://output', 'w' );
-  
-          // Add CSV Header Row with DB column names & meta keys
-          fputcsv( $output, [
-              'ID', 
-              'post_title', 
-              // 'post_content', 
-              'post_excerpt',
-              '_my_reads_author', 
-              '_my_reads_format', 
-              '_my_reads_rating', 
-              '_my_reads_ratingStyle', 
-              '_my_reads_isFavorite', 
-              '_my_reads_amazonLink'
-          ]);
-  
-          // Fetch My Reads Posts
-          $args = [
-              'post_type'      => 'my_reads',
-              'posts_per_page' => -1,
-              'post_status'    => 'publish',
-          ];
-          $query = new WP_Query( $args );
-  
-          if ( $query->have_posts() ) {
-              while ( $query->have_posts() ) {
-                  $query->the_post();
-                  
-                  // Get post data and meta
-                  $row = [
-                      get_the_ID(),
-                      get_the_title(),
-                      // wp_strip_all_tags( get_the_content() ),
-                      wp_strip_all_tags( get_the_excerpt() ),
-                      get_post_meta( get_the_ID(), '_my_reads_author', true ),
-                      get_post_meta( get_the_ID(), '_my_reads_format', true ),
-                      get_post_meta( get_the_ID(), '_my_reads_rating', true ),
-                      get_post_meta( get_the_ID(), '_my_reads_ratingStyle', true ),
-                      get_post_meta( get_the_ID(), '_my_reads_isFavorite', true ),
-                      get_post_meta( get_the_ID(), '_my_reads_amazonLink', true ),
-                  ];
-  
-                  // Write row to CSV
-                  fputcsv( $output, $row );
-              }
-              wp_reset_postdata();
-          }
-  
-          fclose( $output ); // Close output stream
-          exit; // Stop further execution
-      }
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'download_my_reads_csv' ) {
+            if ( ! current_user_can( 'manage_options' ) ) {
+                wp_die( __( 'You do not have permission to download this file.', 'textdomain' ) );
+            }
+
+            // Set CSV Headers
+            header( 'Content-Type: text/csv; charset=utf-8' );
+            header( 'Content-Disposition: attachment; filename=my-reads.csv' );
+
+            // Open output stream for writing CSV
+            $output = fopen( 'php://output', 'w' );
+
+            // Add CSV Header Row with DB column names & meta keys
+            fputcsv( $output, [
+                'ID',
+                'post_title',
+                // 'post_content',
+                'post_excerpt',
+                '_my_reads_author',
+                '_my_reads_format',
+                '_my_reads_rating',
+                '_my_reads_ratingStyle',
+                '_my_reads_isFavorite',
+                '_my_reads_amazonLink'
+            ] );
+
+            // Fetch My Reads Posts
+            $args = [
+                'post_type'      => 'my_reads',
+                'posts_per_page' => -1,
+                'post_status'    => 'publish',
+            ];
+            $query = new WP_Query( $args );
+
+            if ( $query->have_posts() ) {
+                while ( $query->have_posts() ) {
+                    $query->the_post();
+
+                    // Get post data and meta
+                    $row = [
+                        get_the_ID(),
+                        get_the_title(),
+                        // wp_strip_all_tags( get_the_content() ),
+                        wp_strip_all_tags( get_the_excerpt() ),
+                        get_post_meta( get_the_ID(), '_my_reads_author', true ),
+                        get_post_meta( get_the_ID(), '_my_reads_format', true ),
+                        get_post_meta( get_the_ID(), '_my_reads_rating', true ),
+                        get_post_meta( get_the_ID(), '_my_reads_ratingStyle', true ),
+                        get_post_meta( get_the_ID(), '_my_reads_isFavorite', true ),
+                        get_post_meta( get_the_ID(), '_my_reads_amazonLink', true ),
+                    ];
+
+                    // Write row to CSV
+                    fputcsv( $output, $row );
+                }
+                wp_reset_postdata();
+            }
+
+            fclose( $output ); // Close output stream
+            exit; // Stop further execution
+        }
     }
 
     /**
@@ -244,7 +246,7 @@ class My_Reads_Settings {
         <form method="post" action="options.php" enctype="multipart/form-data">
         <?php
           settings_fields( 'my_reads_settings_group' );
-          do_settings_sections( 'my_reads_settings' );
+        do_settings_sections( 'my_reads_settings' );
         ?>
           <table class="form-table">
             <tr valign="top">

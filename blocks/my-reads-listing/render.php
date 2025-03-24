@@ -1,6 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+} // Exit if accessed directly
 
 $wrapper_attributes = get_block_wrapper_attributes();
 $attributes_json = wp_json_encode( $attributes );
