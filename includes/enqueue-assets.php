@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 class My_Add_Assets {
     public function __construct() {
         add_action( 'after_setup_theme', [$this, 'add_square_image_size' ] );

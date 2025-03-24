@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 class My_Reads_Bootstrap {
     public function __construct() {
         register_activation_hook( __FILE__, [ $this, 'my_reads_activate' ] );

@@ -1,5 +1,6 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 class My_Reads_Register_Meta {
     public function __construct() {
         add_action( 'init', [ $this, 'register_my_reads_post_meta'] );

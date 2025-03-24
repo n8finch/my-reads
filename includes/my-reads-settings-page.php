@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 class My_Reads_Settings {
     public function __construct() {
         add_action( 'admin_menu', [ $this, 'my_reads_cpt_settings_submenu' ] );

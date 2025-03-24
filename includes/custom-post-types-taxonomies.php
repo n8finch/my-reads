@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 class My_Reads_CPT {
     /**
      * My_Reads_CPT constructor.

@@ -1,5 +1,6 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 class My_Reads_Register_Patterns {
     public function __construct() {
         add_action( 'init', [ $this, 'my_reads_register_patterns' ] );

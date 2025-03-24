@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 class Get_All_Reads_Endpoint {
     // Define the path to the JSON file.
     public $all_reads_file = '';

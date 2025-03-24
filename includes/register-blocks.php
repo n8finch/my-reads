@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 class My_Reads_Register_Blocks {
     public const UNREGISTERED_BLOCKS = [
         'my-reads/my-reads-details',

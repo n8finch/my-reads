@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 class My_Reads_Register_Templates {
     public function __construct() {
         // add_filter( 'single_template', [ $this, 'my_reads_load_single_template_php' ] );
