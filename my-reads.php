@@ -21,6 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Set up constants
  */
+if ( ! defined( 'MY_READS_PLUGIN_VERSION' ) ) {
+    define( 'MY_READS_PLUGIN_VERSION', '0.2.1' );
+}
+
 if ( ! defined( 'MY_READS_PLUGIN_FILE' ) ) {
     define( 'MY_READS_PLUGIN_FILE', __FILE__ );
 }

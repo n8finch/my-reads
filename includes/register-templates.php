@@ -26,9 +26,6 @@ class My_Reads_Register_Templates {
     }
 
     public function add_wp_theme_json_data( $theme_json, $context ) {
-        echo '<pre>';
-        var_dump( 'oweowi' );
-        wp_die();
         // Only apply if in the site editor or frontend
         if ( $context !== 'theme' ) {
             return $theme_json;

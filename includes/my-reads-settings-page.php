@@ -56,27 +56,36 @@ class My_Reads_Settings {
 
     // Handle the file upload
     public function my_reads_file_upload( $file ) {
-        if ( !empty( $_FILES['my_reads_csv_file']['name'] ) ) {
-            // Use WordPress's file upload functionality
-            $uploaded_file = $_FILES['my_reads_csv_file'];
-
-            // Check if file is a CSV
-            $file_type = wp_check_filetype( $uploaded_file['name'] );
-            if ( $file_type['ext'] !== 'csv' ) {
-                wp_die( __( 'Invalid file type. Only CSV files are allowed.', 'my-reads' ) );
-            }
-
-            // Move the uploaded file to the WordPress uploads directory
-            $upload = wp_handle_upload( $uploaded_file, ['test_form' => false] );
-            if ( isset( $upload['file'] ) ) {
-                $this->import_my_reads_csv( $upload['file'] );
-            } else {
-                wp_die( 'File upload failed.' );
-            }
-
-            // Delete the file after processing.
-            wp_delete_file( $upload['file'] );
+        // Verify the nonce for file upload.
+        if ( ! isset( $_POST['my_reads_csv_file_nonce'] ) || 
+            ! wp_verify_nonce( $_POST['my_reads_csv_file_nonce'], 'my_reads_csv_file_action' ) ) {
+            wp_die( __( 'Security check failed.', 'textdomain' ) );
         }
+
+        // Check if the file is empty or not readable.
+        if ( empty( $_FILES['my_reads_csv_file']['name'] ) ) {
+           wp_die( esc_html( __( 'The file is not readable.', 'my-reads' ) ) );
+        }
+
+        // Use WordPress's file upload functionality
+        $uploaded_file = $_FILES['my_reads_csv_file'];
+
+        // Check if file is a CSV
+        $file_type = wp_check_filetype( $uploaded_file['name'] );
+        if ( $file_type['ext'] !== 'csv' ) {
+            wp_die( esc_html( __( 'Invalid file type. Only CSV files are allowed.', 'my-reads' ) ) );
+        }
+
+        // Move the uploaded file to the WordPress uploads directory
+        $upload = wp_handle_upload( $uploaded_file, ['test_form' => false] );
+        if ( isset( $upload['file'] ) ) {
+            $this->import_my_reads_csv( $upload['file'] );
+        } else {
+            wp_die( 'File upload failed.' );
+        }
+
+        // Delete the file after processing.
+        wp_delete_file( $upload['file'] );
     }
 
     public function generate_post_content( $author ) {
@@ -170,6 +179,7 @@ class My_Reads_Settings {
               <th scope="row">CSV File Upload</th>
               <td>
                 <input type="file" name="my_reads_csv_file" accept=".csv" />
+                <?php wp_nonce_field( 'my_reads_csv_file_action', 'my_reads_csv_file_nonce' ); ?>
               </td>
             </tr>
           </table>
