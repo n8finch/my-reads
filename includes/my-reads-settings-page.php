@@ -246,7 +246,7 @@ class MyReads_Settings {
         <form method="post" action="options.php" enctype="multipart/form-data">
         <?php
           settings_fields( 'myreads_settings_group' );
-          do_settings_sections( 'myreads_settings' );
+        do_settings_sections( 'myreads_settings' );
         ?>
           <table class="form-table">
             <tr valign="top">
