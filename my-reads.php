@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name:       My Reads
- * Plugin URI: 				https://n8finch.com
+ * Plugin URI: 				https://github.com/n8finch/my-reads
  * Description:       A plugin to allow users to track their reading list.
  * Requires at least: 6.7
  * Requires PHP:      7.4

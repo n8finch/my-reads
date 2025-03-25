@@ -64,7 +64,7 @@ class MyReads_Settings {
         // Verify the nonce for file upload.
         if ( ! isset( $_POST['myreads_csv_file_nonce'] ) ||
             ! wp_verify_nonce( $_POST['myreads_csv_file_nonce'], 'myreads_csv_file_action' ) ) {
-            wp_die( __( 'Security check failed.', 'my-reads' ) );
+            wp_die( esc_html( __( 'Security check failed.', 'my-reads' ) ) );
         }
 
         // Check if the file is empty or not readable.
@@ -160,22 +160,28 @@ class MyReads_Settings {
      */
     public function myreads_download_csv() {
         if ( isset( $_GET['action'] ) && $_GET['action'] === 'download_myreads_csv' ) {
-            if ( ! current_user_can( 'manage_options' ) ) {
-                wp_die( __( 'You do not have permission to download this file.', 'textdomain' ) );
+            if ( ! current_user_can( 'edit_posts' ) ) {
+                wp_die( esc_html( __( 'You do not have permission to download this file.', 'my-reads' ) ) );
             }
 
-            // Set CSV Headers
-            header( 'Content-Type: text/csv; charset=utf-8' );
-            header( 'Content-Disposition: attachment; filename=my-reads.csv' );
+            // Initialize WP_Filesystem
+            global $wp_filesystem;
+            if ( ! function_exists( 'WP_Filesystem' ) ) {
+                require_once ABSPATH . 'wp-admin/includes/file.php';
+            }
+            WP_Filesystem();
 
-            // Open output stream for writing CSV
-            $output = fopen( 'php://output', 'w' );
+            // Define a temporary file path
+            $upload_dir = wp_upload_dir();
+            $csv_path   = trailingslashit( $upload_dir['path'] ) . 'my-reads.csv';
 
-            // Add CSV Header Row with DB column names & meta keys
-            fputcsv( $output, [
+            // Initialize CSV content as a string
+            $csv_content = '';
+
+            // Add CSV Header Row
+            $csv_content .= implode( ',', [
                 'ID',
                 'post_title',
-                // 'post_content',
                 'post_excerpt',
                 '_myreads_author',
                 '_myreads_format',
@@ -183,7 +189,7 @@ class MyReads_Settings {
                 '_myreads_ratingStyle',
                 '_myreads_isFavorite',
                 '_myreads_amazonLink'
-            ] );
+            ] ) . "\n";
 
             // Fetch My Reads Posts
             $args = [
@@ -200,24 +206,35 @@ class MyReads_Settings {
                     // Get post data and meta
                     $row = [
                         get_the_ID(),
-                        get_the_title(),
-                        // wp_strip_all_tags( get_the_content() ),
-                        wp_strip_all_tags( get_the_excerpt() ),
-                        get_post_meta( get_the_ID(), '_myreads_author', true ),
-                        get_post_meta( get_the_ID(), '_myreads_format', true ),
-                        get_post_meta( get_the_ID(), '_myreads_rating', true ),
-                        get_post_meta( get_the_ID(), '_myreads_ratingStyle', true ),
-                        get_post_meta( get_the_ID(), '_myreads_isFavorite', true ),
-                        get_post_meta( get_the_ID(), '_myreads_amazonLink', true ),
+                        '"' . str_replace( '"', '""', get_the_title() ) . '"', // Escape quotes
+                        '"' . str_replace( '"', '""', wp_strip_all_tags( get_the_excerpt() ) ) . '"',
+                        '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_author', true ) ) . '"',
+                        '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_format', true ) ) . '"',
+                        '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_rating', true ) ) . '"',
+                        '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_ratingStyle', true ) ) . '"',
+                        '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_isFavorite', true ) ) . '"',
+                        '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_amazonLink', true ) ) . '"',
                     ];
 
-                    // Write row to CSV
-                    fputcsv( $output, $row );
+                    // Convert array to CSV format and add to content
+                    $csv_content .= implode( ',', $row ) . "\n";
                 }
                 wp_reset_postdata();
             }
 
-            fclose( $output ); // Close output stream
+            // Write CSV file using WP_Filesystem
+            if ( ! $wp_filesystem->put_contents( $csv_path, $csv_content, FS_CHMOD_FILE ) ) {
+                wp_die( esc_html__( 'Failed to create the CSV file.', 'my-reads' ) );
+            }
+
+            // Serve the file for download
+            header( 'Content-Type: text/csv; charset=utf-8' );
+            header( 'Content-Disposition: attachment; filename=my-reads.csv' );
+            echo wp_kses_post( $wp_filesystem->get_contents( $csv_path ) );
+
+            // Cleanup: Delete the temporary file after serving
+            $wp_filesystem->delete( $csv_path );
+
             exit; // Stop further execution
         }
     }
