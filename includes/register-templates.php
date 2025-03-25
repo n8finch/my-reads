@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly
 
-class My_Reads_Register_Templates {
+class MyReads_Register_Templates {
     public function __construct() {
         // add_filter( 'single_template', [ $this, 'my_reads_load_single_template_php' ] );
         // add_filter( 'wp_theme_json_data', [$this, 'add_html_template_path' ], 10, 2);
@@ -25,7 +25,7 @@ class My_Reads_Register_Templates {
 
     public function my_reads_get_template( $template ) {
         ob_start();
-        include MY_READS_PATH . "/templates/{$template}";
+        include MYREADS_PATH . "/templates/{$template}";
         return ob_get_clean();
     }
 
@@ -59,7 +59,7 @@ class My_Reads_Register_Templates {
     */
     public function my_reads_load_single_template_php( $template ) {
         global $post;
-        $my_reads_template = MY_READS_PATH . '/templates/single-my_reads.php';
+        $my_reads_template = MYREADS_PATH . '/templates/single-my_reads.php';
 
         if ( 'my_reads' === $post->post_type && file_exists( $my_reads_template ) ) {
             return $my_reads_template;
@@ -69,4 +69,4 @@ class My_Reads_Register_Templates {
     }
 }
 
-new My_Reads_Register_Templates();
+new MyReads_Register_Templates();

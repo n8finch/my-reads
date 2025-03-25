@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly
 
-class My_Reads_Settings {
+class MyReads_Settings {
     public function __construct() {
         add_action( 'admin_menu', [ $this, 'my_reads_cpt_settings_submenu' ] );
         add_action( 'custom_menu_order', [ $this, 'my_reads_cpt_settings_menu_order' ] );
@@ -30,7 +30,7 @@ class My_Reads_Settings {
 
     public function my_reads_admin_notice() {
         // Check if the success message transient exists
-        if ( $message = get_transient( 'my_reads_csv_import_success' ) ) {
+        if ( $message = get_transient( 'myreads_csv_import_success' ) ) {
             echo '<div class="notice notice-success is-dismissible">';
             echo '<p>' . esc_html( $message ) . '</p>';
             echo '</div>';
@@ -52,28 +52,28 @@ class My_Reads_Settings {
 
     // Register the setting
     public function my_reads_register_settings() {
-        register_setting( 'my_reads_settings_group', 'my_reads_csv_file', [
+        register_setting( 'myreads_settings_group', 'myreads_csv_file', [
             'type' => 'string',
             'description' => 'CSV file for My Reads',
-            'sanitize_callback' => [ $this, 'my_reads_file_upload' ]
+            'sanitize_callback' => [ $this, 'myreads_file_upload' ]
         ] );
     }
 
     // Handle the file upload
-    public function my_reads_file_upload( $file ) {
+    public function myreads_file_upload( $file ) {
         // Verify the nonce for file upload.
-        if ( ! isset( $_POST['my_reads_csv_file_nonce'] ) ||
-            ! wp_verify_nonce( $_POST['my_reads_csv_file_nonce'], 'my_reads_csv_file_action' ) ) {
+        if ( ! isset( $_POST['myreads_csv_file_nonce'] ) ||
+            ! wp_verify_nonce( $_POST['myreads_csv_file_nonce'], 'myreads_csv_file_action' ) ) {
             wp_die( __( 'Security check failed.', 'my-reads' ) );
         }
 
         // Check if the file is empty or not readable.
-        if ( empty( $_FILES['my_reads_csv_file']['name'] ) ) {
+        if ( empty( $_FILES['myreads_csv_file']['name'] ) ) {
             wp_die( esc_html( __( 'The file is not readable.', 'my-reads' ) ) );
         }
 
         // Use WordPress's file upload functionality
-        $uploaded_file = $_FILES['my_reads_csv_file'];
+        $uploaded_file = $_FILES['myreads_csv_file'];
 
         // Check if file is a CSV
         $file_type = wp_check_filetype( $uploaded_file['name'] );
@@ -96,7 +96,7 @@ class My_Reads_Settings {
     public function generate_post_content( $author ) {
         // Get the my-reads-default.php pattern content
         ob_start();
-        include MY_READS_PATH . '/patterns/my-reads-default.php';
+        include MYREADS_PATH . '/patterns/my-reads-default.php';
         $content = ob_get_clean();
         // Replace the placeholder with the actual author name
         $content = str_replace( 'Author:', "Author: $author", $content );
@@ -150,7 +150,7 @@ class My_Reads_Settings {
             }
         }
 
-        set_transient( 'my_reads_csv_import_success', 'CSV file uploaded and imported successfully!', 5 ); // 5 seconds
+        set_transient( 'myreads_csv_import_success', 'CSV file uploaded and imported successfully!', 5 ); // 5 seconds
     }
 
     /**
@@ -245,15 +245,15 @@ class My_Reads_Settings {
         <h2>Upload CSV for My Reads</h2>
         <form method="post" action="options.php" enctype="multipart/form-data">
         <?php
-          settings_fields( 'my_reads_settings_group' );
-        do_settings_sections( 'my_reads_settings' );
+          settings_fields( 'myreads_settings_group' );
+          do_settings_sections( 'myreads_settings' );
         ?>
           <table class="form-table">
             <tr valign="top">
               <th scope="row">CSV File Upload</th>
               <td>
-                <input type="file" name="my_reads_csv_file" accept=".csv" />
-                <?php wp_nonce_field( 'my_reads_csv_file_action', 'my_reads_csv_file_nonce' ); ?>
+                <input type="file" name="myreads_csv_file" accept=".csv" />
+                <?php wp_nonce_field( 'myreads_csv_file_action', 'myreads_csv_file_nonce' ); ?>
               </td>
             </tr>
           </table>
@@ -271,4 +271,4 @@ class My_Reads_Settings {
     }
 }
 
-new My_Reads_Settings();
+new MyReads_Settings();

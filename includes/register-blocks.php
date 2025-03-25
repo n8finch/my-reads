@@ -24,10 +24,10 @@ class My_Reads_Register_Blocks {
     * @return void
     */
     public function my_reads_block_init() {
-        register_block_type( MY_READS_PATH . '/build/my-reads-listing' );
-        register_block_type( MY_READS_PATH . '/build/my-reads-star-rating' );
-        register_block_type( MY_READS_PATH . '/build/my-reads-media-format' );
-        // register_block_type( MY_READS_PATH . '/build/my-reads-details' );
+        register_block_type( MYREADS_PATH . '/build/my-reads-listing' );
+        register_block_type( MYREADS_PATH . '/build/my-reads-star-rating' );
+        register_block_type( MYREADS_PATH . '/build/my-reads-media-format' );
+        // register_block_type( MYREADS_PATH . '/build/my-reads-details' );
     }
 
     /**

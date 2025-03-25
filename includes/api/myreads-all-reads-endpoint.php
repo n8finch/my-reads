@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly
 
-class Get_All_Reads_Endpoint {
+class MyReads_All_Reads_Endpoint {
     // Define the path to the JSON file.
     public $all_reads_file = '';
 
@@ -125,4 +125,4 @@ class Get_All_Reads_Endpoint {
     }
 }
 
-new Get_All_Reads_Endpoint();
+new MyReads_All_Reads_Endpoint();

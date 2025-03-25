@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly
 
-class My_Add_Assets {
+class MyReads_Add_Assets {
     public function __construct() {
         add_action( 'after_setup_theme', [$this, 'add_square_image_size' ] );
         add_action( 'admin_enqueue_scripts', [$this, 'enqueue_admin_settings_scripts'] );
@@ -25,7 +25,7 @@ class My_Add_Assets {
     public function enqueue_admin_settings_scripts() {
         // Enqueue script for the settings page.
         if ( isset( $_GET['page'] ) && sanitize_text_field( $_GET['page'] ) === 'my-reads-cpt-settings' ) {
-            wp_enqueue_script( 'my-reads-settings', MY_READS_URL . '/includes/js/admin-my-reads-settings-page.js', [], MY_READS_PLUGIN_VERSION, true );
+            wp_enqueue_script( 'my-reads-settings', MYREADS_URL . '/includes/js/admin-my-reads-settings-page.js', [], MYREADS_PLUGIN_VERSION, true );
 
             // Add in extra data for the settings page.
             wp_localize_script( 'my-reads-settings', 'MYREADS_SETTINGS', [
@@ -46,7 +46,7 @@ class My_Add_Assets {
         }
 
         // Automatically load imported dependencies and assets version.
-        $asset_file = include MY_READS_PATH . '/build/slotfill-my-reads/index.asset.php';
+        $asset_file = include MYREADS_PATH . '/build/slotfill-my-reads/index.asset.php';
 
         // Enqueue CSS dependencies.
         foreach ( $asset_file['dependencies'] as $style ) {
@@ -56,7 +56,7 @@ class My_Add_Assets {
         // Load our app.js.
         wp_register_script(
             'slotfill-my-reads',
-            MY_READS_URL . '/build/slotfill-my-reads/index.js',
+            MYREADS_URL . '/build/slotfill-my-reads/index.js',
             $asset_file['dependencies'],
             $asset_file['version']
         );
@@ -84,10 +84,10 @@ class My_Add_Assets {
 
         // Define default images based on format
         $default_images = [
-            'article' => MY_READS_URL . '/includes/images/article.webp',
-            'audiobook' => MY_READS_URL . '/includes/images/headphones.webp',
-            'book'       => MY_READS_URL . '/includes/images/book.webp',
-            'comicbook'  => MY_READS_URL . '/includes/images/article.webp',
+            'article' => MYREADS_URL . '/includes/images/article.webp',
+            'audiobook' => MYREADS_URL . '/includes/images/headphones.webp',
+            'book'       => MYREADS_URL . '/includes/images/book.webp',
+            'comicbook'  => MYREADS_URL . '/includes/images/article.webp',
         ];
 
         // Check if the format exists in our defaults, otherwise return the original HTML
@@ -99,4 +99,4 @@ class My_Add_Assets {
     }
 }
 
-new My_Add_Assets();
+new MyReads_Add_Assets();

@@ -4,18 +4,18 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly
 
-class My_Reads_CPT {
+class MyReads_CPT {
     /**
-     * My_Reads_CPT constructor.
+     * MyReads_CPT constructor.
      */
     public function __construct() {
         add_action( 'init', [ $this, 'maybe_flush_rewrites' ] );
         add_action( 'init', [ $this, 'register_post_type_settings' ] );
         add_action( 'init', [ $this, 'register_custom_taxonomies' ] );
-        add_filter( 'manage_edit-my_reads_columns', [ $this, 'my_reads_columns' ] );
-        add_action( 'manage_my_reads_posts_custom_column', [ $this, 'manage_my_reads_columns' ], 10, 2 );
+        add_filter( 'manage_edit-myreads_columns', [ $this, 'myreads_columns' ] );
+        add_action( 'manage_myreads_posts_custom_column', [ $this, 'manage_myreads_columns' ], 10, 2 );
         add_action( 'restrict_manage_posts', [ $this, 'my_reads_restrict_manage_posts' ] );
-        add_action( 'pre_get_posts', [ $this, 'my_reads_genre_taxonomy_sort_order' ] );
+        add_action( 'pre_get_posts', [ $this, 'myreads_genre_taxonomy_sort_order' ] );
     }
 
     public function maybe_flush_rewrites() {
@@ -24,12 +24,12 @@ class My_Reads_CPT {
             require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
         }
 
-        $data = get_plugin_data( MY_READS_PLUGIN_FILE );
+        $data = get_plugin_data( MYREADS_PLUGIN_FILE );
 
-        if ( get_transient( 'my_reads_flush_rewrites' ) || get_option( 'my_reads_plugin_version' ) !== $data['Version'] ) {
+        if ( get_transient( 'myreads_flush_rewrites' ) || get_option( 'myreads_plugin_version' ) !== $data['Version'] ) {
             flush_rewrite_rules();
-            delete_transient( 'my_reads_flush_rewrites' );
-            update_option( 'my_reads_plugin_version', $data['Version'], true );
+            delete_transient( 'myreads_flush_rewrites' );
+            update_option( 'myreads_plugin_version', $data['Version'], true );
         }
     }
 
@@ -85,9 +85,9 @@ class My_Reads_CPT {
         ];
 
         // add a filter for customizing post types from a child theme or plugin
-        $args = apply_filters( __CLASS__ . '/my_reads_ctp_args', $args, 'my_reads' );
+        $args = apply_filters( __CLASS__ . '/myreads_ctp_args', $args, 'myreads' );
 
-        register_post_type( 'my_reads', $args );
+        register_post_type( 'myreads', $args );
     }
 
     /**
@@ -96,8 +96,8 @@ class My_Reads_CPT {
      * @return void
      */
     public function register_custom_taxonomies() {
-        $this->register_taxonomy_settings( 'my_reads_genre', 'Genres', 'Genre', 'my-reads-genre', [ 'my_reads' ], true );
-        $this->register_taxonomy_settings( 'my_reads_year', 'Years', 'Year', 'my-reads-year', [ 'my_reads' ], true );
+        $this->register_taxonomy_settings( 'myreads_genre', 'Genres', 'Genre', 'my-reads-genre', [ 'myreads' ], true );
+        $this->register_taxonomy_settings( 'myreads_year', 'Years', 'Year', 'my-reads-year', [ 'myreads' ], true );
     }
 
     /**
@@ -162,12 +162,12 @@ class My_Reads_CPT {
      * @param array $columns
      * @return array
      */
-    public function my_reads_columns( $columns ) {
+    public function myreads_columns( $columns ) {
         $columns = [
             'cb' =>   '<input type="checkbox" />',
             'title' => __( 'Title', 'my-reads' ),
             'cover-image' => __( 'Cover', 'my-reads' ),
-            'my_reads_genre' => __( 'Genre', 'my-reads' ),
+            'myreads_genre' => __( 'Genre', 'my-reads' ),
             'year' => __( 'Year read', 'my-reads' ),
             'date' => __( 'Date', 'my-reads' )
         ];
@@ -186,7 +186,7 @@ class My_Reads_CPT {
         if ( $typenow == $post_type ) {
 
             // create an array of taxonomy slugs you want to filter by - if you want to retrieve all taxonomies, could use get_taxonomies() to build the list
-            $filters = [ 'my_reads_genre', 'my_reads_year' ];
+            $filters = [ 'myreads_genre', 'myreads_year' ];
 
             foreach ( $filters as $tax_slug ) {
                 // retrieve the taxonomy object
@@ -221,7 +221,7 @@ class My_Reads_CPT {
      * @param int    $post_id
      * @return void
      */
-    public function manage_my_reads_columns( $column, $post_id ) {
+    public function manage_myreads_columns( $column, $post_id ) {
         switch ( $column ) {
             case 'cover-image':
                 $thumbnail = get_the_post_thumbnail_url( $post_id, 'my_reads_image', true );
@@ -232,8 +232,8 @@ class My_Reads_CPT {
                 }
                 break;
 
-            case 'my_reads_genre':
-                $term_names = wp_get_post_terms( $post_id, 'my_reads_genre', ["fields" => "names"] );
+            case 'myreads_genre':
+                $term_names = wp_get_post_terms( $post_id, 'myreads_genre', ["fields" => "names"] );
                 if ( $term_names ) {
                     foreach ( $term_names as $term ) {
                         echo wp_kses_post( $term ) . '<br/>';
@@ -242,7 +242,7 @@ class My_Reads_CPT {
                 break;
 
             case 'year':
-                $term_names = wp_get_post_terms( $post_id, 'my_reads_year', ["fields" => "names"] );
+                $term_names = wp_get_post_terms( $post_id, 'myreads_year', ["fields" => "names"] );
                 if ( $term_names ) {
                     foreach ( $term_names as $term ) {
                         echo wp_kses_post( $term ) . '<br/>';
@@ -260,12 +260,12 @@ class My_Reads_CPT {
      * @param object $query
      * @return void
      */
-    public function my_reads_genre_taxonomy_sort_order( $query ) {
-        if ( $query->is_tax( 'my_reads_genre' ) ) {
+    public function myreads_genre_taxonomy_sort_order( $query ) {
+        if ( $query->is_tax( 'myreads_genre' ) ) {
             $query->set( 'orderby', 'title' );
             $query->set( 'order', 'ASC' );
         }
     }
 }
 
-new My_Reads_CPT();
+new MyReads_CPT();

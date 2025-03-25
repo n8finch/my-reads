@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly
 
-class Get_Amazon_Info_Endpoint {
+class MyReads_Amazon_Info_Endpoint {
     // Define the path to the JSON file.
     public $all_reads_file = '';
 
@@ -75,4 +75,4 @@ class Get_Amazon_Info_Endpoint {
     }
 }
 
-new Get_Amazon_Info_Endpoint();
+new MyReads_Amazon_Info_Endpoint();

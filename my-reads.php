@@ -21,42 +21,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Set up constants
  */
-if ( ! defined( 'MY_READS_PLUGIN_VERSION' ) ) {
-    define( 'MY_READS_PLUGIN_VERSION', '0.2.1' );
+if ( ! defined( 'MYREADS_PLUGIN_VERSION' ) ) {
+    define( 'MYREADS_PLUGIN_VERSION', '0.2.1' );
 }
 
-if ( ! defined( 'MY_READS_PLUGIN_FILE' ) ) {
-    define( 'MY_READS_PLUGIN_FILE', __FILE__ );
+if ( ! defined( 'MYREADS_PLUGIN_FILE' ) ) {
+    define( 'MYREADS_PLUGIN_FILE', __FILE__ );
 }
 
-if ( ! defined( 'MY_READS_PATH' ) ) {
-    define( 'MY_READS_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
+if ( ! defined( 'MYREADS_PATH' ) ) {
+    define( 'MYREADS_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 }
 
-if ( ! defined( 'MY_READS_URL' ) ) {
-    define( 'MY_READS_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
+if ( ! defined( 'MYREADS_URL' ) ) {
+    define( 'MYREADS_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 }
 
 // Bootstrap the plugin.
-require_once MY_READS_PATH . '/includes/bootstrap.php';
+require_once MYREADS_PATH . '/includes/bootstrap.php';
 
 // Register the custom post type, taxonomies, and settings.
-require_once MY_READS_PATH . '/includes/custom-post-types-taxonomies.php';
-require_once MY_READS_PATH . '/includes/my-reads-settings-page.php';
+require_once MYREADS_PATH . '/includes/custom-post-types-taxonomies.php';
+require_once MYREADS_PATH . '/includes/my-reads-settings-page.php';
 
 // Register custom blocks and meta.
-require_once MY_READS_PATH . '/includes/register-blocks.php';
-require_once MY_READS_PATH . '/includes/register-meta.php';
+require_once MYREADS_PATH . '/includes/register-blocks.php';
+require_once MYREADS_PATH . '/includes/register-meta.php';
 
 // Register patterns.
-require_once MY_READS_PATH . '/includes/register-patterns.php';
+require_once MYREADS_PATH . '/includes/register-patterns.php';
 
 /// Register the single template.
-require_once MY_READS_PATH . '/includes/register-templates.php';
+require_once MYREADS_PATH . '/includes/register-templates.php';
 
 // Enqueue assets.
-require_once MY_READS_PATH . '/includes/enqueue-assets.php';
+require_once MYREADS_PATH . '/includes/enqueue-assets.php';
 
 // Add API Endpoints
-require_once MY_READS_PATH . '/includes/api/get-all-reads-endpoint.php';
-require_once MY_READS_PATH . '/includes/api/get-amazon-info-endpoint.php';
+require_once MYREADS_PATH . '/includes/api/myreads-all-reads-endpoint.php';
+require_once MYREADS_PATH . '/includes/api/myreads-amazon-info-endpoint.php';
