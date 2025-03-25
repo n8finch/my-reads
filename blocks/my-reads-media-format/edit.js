@@ -20,8 +20,8 @@ export default function Edit( {
 	);
 
 	useEffect( () => {
-		const initStyle = meta?._my_reads_format
-			? meta?._my_reads_format
+		const initStyle = meta?._myreads_format
+			? meta?._myreads_format
 			: 'book';
 		setAttributes( {
 			format: initStyle,
@@ -31,7 +31,7 @@ export default function Edit( {
 	const onChangeMediaFormat = ( val ) => {
 		updateMeta( {
 			...meta,
-			_my_reads_format: val,
+			_myreads_format: val,
 		} );
 		setAttributes( { format: val } );
 	};

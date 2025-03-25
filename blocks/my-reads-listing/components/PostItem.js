@@ -13,8 +13,8 @@ const PostItem = ( { post, layout, useAmazonLink } ) => {
 
 	// Set some defaults for the featured image.
 	if ( ! post.featured_image ) {
-		// Add default image if none is set based on post._my_reads_format
-		switch ( post._my_reads_format ) {
+		// Add default image if none is set based on post._myreads_format
+		switch ( post._myreads_format ) {
 			case 'audiobook':
 				post.featured_image = AudioBookImg;
 				break;
@@ -38,7 +38,7 @@ const PostItem = ( { post, layout, useAmazonLink } ) => {
 				<a
 					href={
 						useAmazonLink
-							? post._my_reads_amazonLink
+							? post._myreads_amazonLink
 							: post.permalink
 					}
 				>
@@ -46,7 +46,7 @@ const PostItem = ( { post, layout, useAmazonLink } ) => {
 						<img src={ post.featured_image } alt={ post.title } />
 					) }
 				</a>
-				{ post?._my_reads_isFavorite && (
+				{ post?._myreads_isFavorite && (
 					<span className="favorite-badge">❤️</span>
 				) }
 			</div>
@@ -54,7 +54,7 @@ const PostItem = ( { post, layout, useAmazonLink } ) => {
 				<a
 					href={
 						useAmazonLink
-							? post._my_reads_amazonLink
+							? post._myreads_amazonLink
 							: post.permalink
 					}
 				>
@@ -63,11 +63,11 @@ const PostItem = ( { post, layout, useAmazonLink } ) => {
 				<small>
 					Rating:{ ' ' }
 					{ getRatingEmojis(
-						post._my_reads_rating,
-						post._my_reads_ratingStyle
+						post._myreads_rating,
+						post._myreads_ratingStyle
 					) }{ ' ' }
 					<br />
-					Format: { getFormatAndEmoji( post._my_reads_format ) }
+					Format: { getFormatAndEmoji( post._myreads_format ) }
 					<br />
 					Categories:{ ' ' }
 					<em>

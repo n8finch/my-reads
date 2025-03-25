@@ -9,14 +9,14 @@ class MyReads_Add_Assets {
         add_action( 'after_setup_theme', [$this, 'add_square_image_size' ] );
         add_action( 'admin_enqueue_scripts', [$this, 'enqueue_admin_settings_scripts'] );
         add_action( 'admin_enqueue_scripts', [$this, 'enqueue_cpt_scripts'] );
-        add_filter( 'post_thumbnail_html', [ $this, 'my_reads_default_featured_image' ], 10, 5 );
+        add_filter( 'post_thumbnail_html', [ $this, 'myreads_default_featured_image' ], 10, 5 );
     }
 
     /**
     * Register book image size (same size Amazon uses).
     */
     public function add_square_image_size() {
-        add_image_size( 'my_reads_image', 344, 522, [ 'center', 'center' ] );
+        add_image_size( 'myreads_image', 344, 522, [ 'center', 'center' ] );
     }
 
     /**
@@ -41,7 +41,7 @@ class MyReads_Add_Assets {
     public function enqueue_cpt_scripts() {
         global $post;
         // Load only on ?page=my-first-gutenberg-app.
-        if ( 'my_reads' !== get_post_type( $post ) ) {
+        if ( 'myreads' !== get_post_type( $post ) ) {
             return;
         }
 
@@ -68,9 +68,9 @@ class MyReads_Add_Assets {
         ] );
     }
 
-    public function my_reads_default_featured_image( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
-        // Only apply to "my_reads" post type
-        if ( get_post_type( $post_id ) !== 'my_reads' ) {
+    public function myreads_default_featured_image( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
+        // Only apply to "myreads" post type
+        if ( get_post_type( $post_id ) !== 'myreads' ) {
             return $html;
         }
 
@@ -79,8 +79,8 @@ class MyReads_Add_Assets {
             return $html;
         }
 
-        // Get the _my_reads_format meta field
-        $format = get_post_meta( $post_id, '_my_reads_format', true ) ?? 'book';
+        // Get the _myreads_format meta field
+        $format = get_post_meta( $post_id, '_myreads_format', true ) ?? 'book';
 
         // Define default images based on format
         $default_images = [

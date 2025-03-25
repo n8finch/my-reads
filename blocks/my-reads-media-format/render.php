@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $post;
 
 $format_sentence = '';
-$format = get_post_meta( $post->ID, '_my_reads_format', true );
+$format = get_post_meta( $post->ID, '_myreads_format', true );
 $format_options = [
     'book' => [
         'icon' => '📖',

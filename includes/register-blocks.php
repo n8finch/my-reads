@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly
 
-class My_Reads_Register_Blocks {
+class MyReads_Register_Blocks {
     public const UNREGISTERED_BLOCKS = [
         'my-reads/my-reads-details',
         'my-reads/my-reads-star-rating',
@@ -12,9 +12,9 @@ class My_Reads_Register_Blocks {
     ];
 
     public function __construct() {
-        add_action( 'init', [ $this, 'my_reads_block_init' ] );
-        add_action( 'allowed_block_types_all', [ $this, 'unregister_my_reads_blocks_on_other_post_types' ], 10, 2 );
-        add_action( 'wp_print_scripts', [ $this, 'unregister_my_reads_blocks_on_other_post_types_js' ], 999 );
+        add_action( 'init', [ $this, 'myreads_block_init' ] );
+        add_action( 'allowed_block_types_all', [ $this, 'unregister_myreads_blocks_on_other_post_types' ], 10, 2 );
+        add_action( 'wp_print_scripts', [ $this, 'unregister_myreads_blocks_on_other_post_types_js' ], 999 );
         add_filter( 'block_categories_all', [ $this, 'add_blocks_to_category' ], 99 );
     }
 
@@ -23,7 +23,7 @@ class My_Reads_Register_Blocks {
     *
     * @return void
     */
-    public function my_reads_block_init() {
+    public function myreads_block_init() {
         register_block_type( MYREADS_PATH . '/build/my-reads-listing' );
         register_block_type( MYREADS_PATH . '/build/my-reads-star-rating' );
         register_block_type( MYREADS_PATH . '/build/my-reads-media-format' );
@@ -46,8 +46,8 @@ class My_Reads_Register_Blocks {
     /**
     * Enqueue block editor only JavaScript and CSS.
     */
-    public function unregister_my_reads_blocks_on_other_post_types( $allowed_block_types, $block_editor_context ) {
-        if ( get_post_type() !== 'my_reads' ) {
+    public function unregister_myreads_blocks_on_other_post_types( $allowed_block_types, $block_editor_context ) {
+        if ( get_post_type() !== 'myreads' ) {
             // Get all registered blocks if $allowed_block_types is not already set.
             if ( ! is_array( $allowed_block_types ) || empty( $allowed_block_types ) ) {
                 $registered_blocks   = WP_Block_Type_Registry::get_instance()->get_all_registered();
@@ -79,8 +79,8 @@ class My_Reads_Register_Blocks {
     * Enqueue block editor only JavaScript and CSS.
     * @todo doesn't seem to actually work to dequeue the styles and scripts
     */
-    public function unregister_my_reads_blocks_on_other_post_types_js() {
-        if ( get_post_type() !== 'my_reads' ) {
+    public function unregister_myreads_blocks_on_other_post_types_js() {
+        if ( get_post_type() !== 'myreads' ) {
             // Dequeue all blocks in UNREGISTERED_BLOCKS
             foreach ( self::UNREGISTERED_BLOCKS as $block ) {
                 wp_dequeue_style( str_replace( '/', '-', $block ) . '-style-css' );
@@ -90,4 +90,4 @@ class My_Reads_Register_Blocks {
     }
 }
 
-new My_Reads_Register_Blocks();
+new MyReads_Register_Blocks();

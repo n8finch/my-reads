@@ -18,7 +18,7 @@ const GenreButtons = ( { posts, onFilterChange } ) => {
 	// Assuming posts have a boolean "favorite" property.
 	// If not, you can modify this to suit your favorites logic.
 	const favoritesCount = posts.filter(
-		( post ) => post._my_reads_isFavorite
+		( post ) => post._myreads_isFavorite
 	).length;
 
 	// Convert genres to an array for rendering

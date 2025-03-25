@@ -14,7 +14,7 @@ class MyReads_CPT {
         add_action( 'init', [ $this, 'register_custom_taxonomies' ] );
         add_filter( 'manage_edit-myreads_columns', [ $this, 'myreads_columns' ] );
         add_action( 'manage_myreads_posts_custom_column', [ $this, 'manage_myreads_columns' ], 10, 2 );
-        add_action( 'restrict_manage_posts', [ $this, 'my_reads_restrict_manage_posts' ] );
+        add_action( 'restrict_manage_posts', [ $this, 'myreads_restrict_manage_posts' ] );
         add_action( 'pre_get_posts', [ $this, 'myreads_genre_taxonomy_sort_order' ] );
     }
 
@@ -179,10 +179,10 @@ class MyReads_CPT {
      *
      * @return void
      */
-    public function my_reads_restrict_manage_posts() {
+    public function myreads_restrict_manage_posts() {
         // only display these taxonomy filters on desired custom post_type listings
         global $typenow;
-        $post_type = 'my_reads';
+        $post_type = 'myreads';
         if ( $typenow == $post_type ) {
 
             // create an array of taxonomy slugs you want to filter by - if you want to retrieve all taxonomies, could use get_taxonomies() to build the list
@@ -224,7 +224,7 @@ class MyReads_CPT {
     public function manage_myreads_columns( $column, $post_id ) {
         switch ( $column ) {
             case 'cover-image':
-                $thumbnail = get_the_post_thumbnail_url( $post_id, 'my_reads_image', true );
+                $thumbnail = get_the_post_thumbnail_url( $post_id, 'myreads_image', true );
                 if ( $thumbnail ) {
                     echo wp_kses_post( '<img src="' . esc_url( $thumbnail ) . '" alt="' . get_the_title() . '" style="max-width: 100px; max-height: 100px;" />' );
                 } else {

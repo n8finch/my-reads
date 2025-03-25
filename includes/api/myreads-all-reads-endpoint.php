@@ -68,7 +68,7 @@ class MyReads_All_Reads_Endpoint {
      */
     public function create_all_reads_file() {
         $args = [
-            'post_type'      => 'my_reads',
+            'post_type'      => 'myreads',
             'posts_per_page' => -1, // Get all posts
             'post_status'    => 'publish',
             'orderby'        => 'date',
@@ -84,26 +84,26 @@ class MyReads_All_Reads_Endpoint {
                 $post_id = get_the_ID();
 
                 // Get the 'years' taxonomy term
-                $years_terms = get_the_terms( $post_id, 'my_reads_year' );
+                $years_terms = get_the_terms( $post_id, 'myreads_year' );
                 $year = $years_terms && ! is_wp_error( $years_terms ) ? $years_terms[0]->name : 'Unknown';
 
-                // Get the featured image in custom size 'my_reads_image'
-                $featured_image = get_the_post_thumbnail_url( $post_id, 'my_reads_image' );
+                // Get the featured image in custom size 'myreads_image'
+                $featured_image = get_the_post_thumbnail_url( $post_id, 'myreads_image' );
 
                 // Prepare post data
                 $post_data = [
                     'id'              => $post_id,
                     'title'           => get_the_title(),
-                    '_my_reads_rating' => floatval( get_post_meta( $post_id, '_my_reads_rating', true ) ),
-                    '_my_reads_ratingStyle' => get_post_meta( $post_id, '_my_reads_ratingStyle', true ) ?? 'star',
-                    '_my_reads_isFavorite' => get_post_meta( $post_id, '_my_reads_isFavorite', true ),
-                    '_my_reads_format' => get_post_meta( $post_id, '_my_reads_format', true ) ?? 'book',
-                    '_my_reads_amazonLink' => get_post_meta( $post_id, '_my_reads_amazonLink', true ) ?? '',
+                    '_myreads_rating' => floatval( get_post_meta( $post_id, '_myreads_rating', true ) ),
+                    '_myreads_ratingStyle' => get_post_meta( $post_id, '_myreads_ratingStyle', true ) ?? 'star',
+                    '_myreads_isFavorite' => get_post_meta( $post_id, '_myreads_isFavorite', true ),
+                    '_myreads_format' => get_post_meta( $post_id, '_myreads_format', true ) ?? 'book',
+                    '_myreads_amazonLink' => get_post_meta( $post_id, '_myreads_amazonLink', true ) ?? '',
                     'excerpt'         => get_the_excerpt(),
                     'featured_image'  => $featured_image ? str_replace( site_url(), '', $featured_image ) : '',
                     'year'             => $year,
                     'permalink'       => str_replace( site_url(), '', get_permalink( $post_id ) ),
-                    'genres'          => wp_get_post_terms( $post_id, 'my_reads_genre', ["fields" => "names"] ),
+                    'genres'          => wp_get_post_terms( $post_id, 'myreads_genre', ["fields" => "names"] ),
                 ];
 
                 // Group posts by year

@@ -19,7 +19,7 @@ import { post } from '@wordpress/icons';
  * The component to be rendered  as part of the plugin.
  */
 const MyReadsCPTSettings = () => {
-	let postType = 'my_reads';
+	let postType = 'myreads';
 	// Retrieve information about the current post type.
 	const { isViewable, postTypeName } = useSelect( ( select ) => {
 		postType = select( editorStore ).getCurrentPostType();
@@ -31,14 +31,14 @@ const MyReadsCPTSettings = () => {
 	}, [] );
 
 	// The list of post types that are allowed to render the plugin.
-	const allowedPostTypes = [ 'my_reads' ];
+	const allowedPostTypes = [ 'myreads' ];
 
 	// If the post type is not viewable or not in the allowed list, do not render the plugin.
 	if ( ! isViewable || ! allowedPostTypes.includes( postTypeName ) ) {
 		return null;
 	}
 
-	const [ postId ] = useEntityProp( 'postType', 'my_reads', 'id' );
+	const [ postId ] = useEntityProp( 'postType', 'myreads', 'id' );
 	const [ meta, setMeta ] = useEntityProp(
 		'postType',
 		postType,
@@ -48,7 +48,7 @@ const MyReadsCPTSettings = () => {
 	const [ loading, setLoading ] = useState( false );
 
 	const handleFetchAmazonData = async () => {
-		if ( ! meta._my_reads_amazonLink ) {
+		if ( ! meta._myreads_amazonLink ) {
 			alert( 'Please enter an Amazon URL.' );
 			return;
 		}
@@ -65,7 +65,7 @@ const MyReadsCPTSettings = () => {
 			const response = await apiFetch( {
 				path: '/my-reads/v1/fetch-amazon-data',
 				method: 'POST',
-				data: { url: meta._my_reads_amazonLink },
+				data: { url: meta._myreads_amazonLink },
 			} );
 
 			if ( response.error ) {
@@ -102,17 +102,17 @@ const MyReadsCPTSettings = () => {
 				<ToggleControl
 					label={ __( 'Mark as favorite' ) }
 					help={ __( 'Check to mark this post as a favorite' ) }
-					checked={ meta._my_reads_isFavorite }
+					checked={ meta._myreads_isFavorite }
 					onChange={ ( checked ) =>
-						setMeta( { ...meta, _my_reads_isFavorite: checked } )
+						setMeta( { ...meta, _myreads_isFavorite: checked } )
 					}
 				/>
 				<br />
 				<InputControl
 					label={ __( 'Amazon URL' ) }
-					value={ meta._my_reads_amazonLink }
+					value={ meta._myreads_amazonLink }
 					onChange={ ( value ) =>
-						setMeta( { ...meta, _my_reads_amazonLink: value } )
+						setMeta( { ...meta, _myreads_amazonLink: value } )
 					}
 					disabled={ loading }
 				/>

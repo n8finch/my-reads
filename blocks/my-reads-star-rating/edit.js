@@ -20,11 +20,11 @@ export default function Edit( {
 	);
 
 	useEffect( () => {
-		const initStyle = meta?._my_reads_ratingStyle
-			? meta?._my_reads_ratingStyle
+		const initStyle = meta?._myreads_ratingStyle
+			? meta?._myreads_ratingStyle
 			: 'star';
 		setAttributes( {
-			rating: meta?._my_reads_rating || 0,
+			rating: meta?._myreads_rating || 0,
 			ratingStyle: initStyle,
 		} );
 	}, [] );
@@ -32,7 +32,7 @@ export default function Edit( {
 	const onChangeRating = ( val ) => {
 		updateMeta( {
 			...meta,
-			_my_reads_rating: val,
+			_myreads_rating: val,
 		} );
 		setAttributes( { rating: val } );
 	};
@@ -40,7 +40,7 @@ export default function Edit( {
 	const onChangeRatingStyle = ( val ) => {
 		updateMeta( {
 			...meta,
-			_my_reads_ratingStyle: val,
+			_myreads_ratingStyle: val,
 		} );
 		setAttributes( { ratingStyle: val } );
 	};

@@ -6,29 +6,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class MyReads_Settings {
     public function __construct() {
-        add_action( 'admin_menu', [ $this, 'my_reads_cpt_settings_submenu' ] );
-        add_action( 'custom_menu_order', [ $this, 'my_reads_cpt_settings_menu_order' ] );
-        add_action( 'admin_init', [ $this, 'my_reads_register_settings' ] );
-        add_action( 'admin_notices', [ $this, 'my_reads_admin_notice' ] );
-        add_action( 'admin_init', [ $this, 'my_reads_download_csv' ] );
+        add_action( 'admin_menu', [ $this, 'myreads_cpt_settings_submenu' ] );
+        add_action( 'custom_menu_order', [ $this, 'myreads_cpt_settings_menu_order' ] );
+        add_action( 'admin_init', [ $this, 'myreads_register_settings' ] );
+        add_action( 'admin_notices', [ $this, 'myreads_admin_notice' ] );
+        add_action( 'admin_init', [ $this, 'myreads_download_csv' ] );
     }
 
     /**
      * Add a submenu page to the My Reads menu
      * @return void
      */
-    public function my_reads_cpt_settings_submenu() {
+    public function myreads_cpt_settings_submenu() {
         add_submenu_page(
-            'edit.php?post_type=my_reads',
+            'edit.php?post_type=myreads',
             __( 'My Reads Settings', 'my-reads' ),
             __( 'Settings', 'my-reads' ),
             'manage_options',
             'my-reads-cpt-settings',
-            [ $this, 'my_reads_cpt_settings_callback' ]
+            [ $this, 'myreads_cpt_settings_callback' ]
         );
     }
 
-    public function my_reads_admin_notice() {
+    public function myreads_admin_notice() {
         // Check if the success message transient exists
         if ( $message = get_transient( 'myreads_csv_import_success' ) ) {
             echo '<div class="notice notice-success is-dismissible">';
@@ -42,7 +42,7 @@ class MyReads_Settings {
      *
      * @return void
      */
-    public function my_reads_cpt_settings_menu_order() {
+    public function myreads_cpt_settings_menu_order() {
         global $submenu;
         if ( !empty( $submenu['my-reads-cpt-settings'] ) && !empty( $submenu['my-reads-cpt-settings'][0] ) ) {
             $submenu['my-reads-cpt-settings'][100] = $submenu['my-reads-cpt-settings'][0];
@@ -51,7 +51,7 @@ class MyReads_Settings {
     }
 
     // Register the setting
-    public function my_reads_register_settings() {
+    public function myreads_register_settings() {
         register_setting( 'myreads_settings_group', 'myreads_csv_file', [
             'type' => 'string',
             'description' => 'CSV file for My Reads',
@@ -84,7 +84,7 @@ class MyReads_Settings {
         // Move the uploaded file to the WordPress uploads directory
         $upload = wp_handle_upload( $uploaded_file, ['test_form' => false] );
         if ( isset( $upload['file'] ) ) {
-            $this->import_my_reads_csv( $upload['file'] );
+            $this->import_myreads_csv( $upload['file'] );
         } else {
             wp_die( 'File upload failed.' );
         }
@@ -103,7 +103,7 @@ class MyReads_Settings {
         return $content;
     }
 
-    public function import_my_reads_csv( $file ) {
+    public function import_myreads_csv( $file ) {
         // Get the CSV data from the file.
         $csv_data = array_map( 'str_getcsv', file( $file ) );
         // Remove the header row.
@@ -122,11 +122,11 @@ class MyReads_Settings {
             $rating = $row['Rating'];
             $year = $row['Year'];
 
-            // Create a new post (for "my_reads" post type)
+            // Create a new post (for "myreads" post type)
             $post_data = [
                 'post_title'   => sanitize_text_field( $title ),
                 'post_content' => wp_kses_post( $this->generate_post_content( $author ) ),
-                'post_type'    => 'my_reads',
+                'post_type'    => 'myreads',
                 'post_status'  => 'publish',
             ];
 
@@ -136,17 +136,17 @@ class MyReads_Settings {
             // If post creation succeeded, proceed with adding meta and taxonomies
             if ( !is_wp_error( $post_id ) ) {
                 // Add format meta
-                update_post_meta( $post_id, '_my_reads_format', sanitize_text_field( $format ) );
+                update_post_meta( $post_id, '_myreads_format', sanitize_text_field( $format ) );
 
                 // Add rating meta
-                update_post_meta( $post_id, '_my_reads_rating', sanitize_text_field( $rating ) );
-                update_post_meta( $post_id, '_my_reads_ratingStyle', 'star' ); // Default rating style
+                update_post_meta( $post_id, '_myreads_rating', sanitize_text_field( $rating ) );
+                update_post_meta( $post_id, '_myreads_ratingStyle', 'star' ); // Default rating style
 
                 // Mark as not favorite by default
-                update_post_meta( $post_id, '_my_reads_isFavorite', false );
+                update_post_meta( $post_id, '_myreads_isFavorite', false );
 
                 // Add Year taxonomy (use the Year as the term slug)
-                wp_set_object_terms( $post_id, sanitize_text_field( $year ), 'my_reads_year' );
+                wp_set_object_terms( $post_id, sanitize_text_field( $year ), 'myreads_year' );
             }
         }
 
@@ -154,12 +154,12 @@ class MyReads_Settings {
     }
 
     /**
-     * my_reads_download_csv
+     * myreads_download_csv
      *
      * @return void
      */
-    public function my_reads_download_csv() {
-        if ( isset( $_GET['action'] ) && $_GET['action'] === 'download_my_reads_csv' ) {
+    public function myreads_download_csv() {
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'download_myreads_csv' ) {
             if ( ! current_user_can( 'manage_options' ) ) {
                 wp_die( __( 'You do not have permission to download this file.', 'textdomain' ) );
             }
@@ -177,17 +177,17 @@ class MyReads_Settings {
                 'post_title',
                 // 'post_content',
                 'post_excerpt',
-                '_my_reads_author',
-                '_my_reads_format',
-                '_my_reads_rating',
-                '_my_reads_ratingStyle',
-                '_my_reads_isFavorite',
-                '_my_reads_amazonLink'
+                '_myreads_author',
+                '_myreads_format',
+                '_myreads_rating',
+                '_myreads_ratingStyle',
+                '_myreads_isFavorite',
+                '_myreads_amazonLink'
             ] );
 
             // Fetch My Reads Posts
             $args = [
-                'post_type'      => 'my_reads',
+                'post_type'      => 'myreads',
                 'posts_per_page' => -1,
                 'post_status'    => 'publish',
             ];
@@ -203,12 +203,12 @@ class MyReads_Settings {
                         get_the_title(),
                         // wp_strip_all_tags( get_the_content() ),
                         wp_strip_all_tags( get_the_excerpt() ),
-                        get_post_meta( get_the_ID(), '_my_reads_author', true ),
-                        get_post_meta( get_the_ID(), '_my_reads_format', true ),
-                        get_post_meta( get_the_ID(), '_my_reads_rating', true ),
-                        get_post_meta( get_the_ID(), '_my_reads_ratingStyle', true ),
-                        get_post_meta( get_the_ID(), '_my_reads_isFavorite', true ),
-                        get_post_meta( get_the_ID(), '_my_reads_amazonLink', true ),
+                        get_post_meta( get_the_ID(), '_myreads_author', true ),
+                        get_post_meta( get_the_ID(), '_myreads_format', true ),
+                        get_post_meta( get_the_ID(), '_myreads_rating', true ),
+                        get_post_meta( get_the_ID(), '_myreads_ratingStyle', true ),
+                        get_post_meta( get_the_ID(), '_myreads_isFavorite', true ),
+                        get_post_meta( get_the_ID(), '_myreads_amazonLink', true ),
                     ];
 
                     // Write row to CSV
@@ -226,7 +226,7 @@ class MyReads_Settings {
      * My Reads CPT settings submenu page HTML
      * @return void
      */
-    public function my_reads_cpt_settings_callback() {
+    public function myreads_cpt_settings_callback() {
         // Display My Reads settings page.
         ?>
       <div class="wrap">
@@ -263,7 +263,7 @@ class MyReads_Settings {
         <hr/>
         <h2>Download CSV for My Reads</h2>
         <form method="get" action="">
-            <input type="hidden" name="action" value="download_my_reads_csv">
+            <input type="hidden" name="action" value="download_myreads_csv">
             <?php submit_button( 'Download CSV' ); ?>
         </form>
     </div>

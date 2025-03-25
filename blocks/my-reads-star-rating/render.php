@@ -9,8 +9,8 @@ global $post;
 
 $ratingEmojis = '';
 // Get the rating and rating style from the post meta
-$rating = floatval( get_post_meta( get_the_ID(), '_my_reads_rating', true ) );
-$ratingStyle = get_post_meta( get_the_ID(), '_my_reads_ratingStyle', true );
+$rating = floatval( get_post_meta( get_the_ID(), '_myreads_rating', true ) );
+$ratingStyle = get_post_meta( get_the_ID(), '_myreads_ratingStyle', true );
 // If the rating style is not set, default to star
 if ( ! $ratingStyle ) {
     $ratingStyle = 'star';

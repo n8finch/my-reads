@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 class MyReads_Register_Patterns {
     public function __construct() {
-        add_action( 'init', [ $this, 'my_reads_register_patterns' ] );
+        add_action( 'init', [ $this, 'myreads_register_patterns' ] );
     }
 
     /**
@@ -13,7 +13,7 @@ class MyReads_Register_Patterns {
      *
      * @return void
      */
-    public function my_reads_register_patterns() {
+    public function myreads_register_patterns() {
         register_block_pattern(
             'my-reads/my-reads-default',
             [
@@ -22,7 +22,7 @@ class MyReads_Register_Patterns {
                 'content' => file_get_contents( MYREADS_PATH . '/patterns/my-reads-default.php' ),
                 'categories' => [ 'my-reads' ],
                 'keywords' => [ 'reads', 'book', 'audiobook', 'article' ],
-                'postTypes' => [ 'my_reads' ],
+                'postTypes' => [ 'myreads' ],
                 'source' => 'plugin'
             ]
         );

@@ -9,20 +9,20 @@ class MyReads_Amazon_Info_Endpoint {
     public $all_reads_file = '';
 
     public function __construct() {
-        add_action( 'rest_api_init', [ $this, 'register_my_reads_fetch_amazon_data_route' ] );
+        add_action( 'rest_api_init', [ $this, 'register_myreads_fetch_amazon_data_route' ] );
     }
 
-    public function register_my_reads_fetch_amazon_data_route() {
+    public function register_myreads_fetch_amazon_data_route() {
         register_rest_route( 'my-reads/v1', '/fetch-amazon-data', [
             'methods' => 'POST',
-            'callback' => [ $this, 'my_reads_fetch_amazon_data' ],
+            'callback' => [ $this, 'myreads_fetch_amazon_data' ],
             'permission_callback' => function () {
                 return current_user_can( 'edit_posts' );
             }
         ] );
     }
 
-    public function my_reads_fetch_amazon_data( $request ) {
+    public function myreads_fetch_amazon_data( $request ) {
         if ( empty( $request['url'] ) ) {
             wp_send_json_error( ['error' => 'Amazon URL is required.'] );
             return;

@@ -46,10 +46,10 @@ const MyReadsFilterApp = ( { attributes } ) => {
 				) ||
 				post.year.toLowerCase().includes( search.toLowerCase() ) ||
 				post.excerpt.toLowerCase().includes( search.toLowerCase() ) ||
-				post._my_reads_format
+				post._myreads_format
 					.toLowerCase()
 					.includes( search.toLowerCase() ) ||
-				( post._my_reads_isFavorite && 'Favorites' === genreFilter )
+				( post._myreads_isFavorite && 'Favorites' === genreFilter )
 		);
 	};
 
@@ -67,7 +67,7 @@ const MyReadsFilterApp = ( { attributes } ) => {
 		} else if ( selectedGenre === 'Favorites' ) {
 			setPostsArray(
 				getBaseFilteredPosts().filter(
-					( post ) => post._my_reads_isFavorite
+					( post ) => post._myreads_isFavorite
 				)
 			);
 		} else {
