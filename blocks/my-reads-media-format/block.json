@@ -5,7 +5,7 @@
 	"version": "0.2.2",
 	"title": "Media Format",
 	"category": "my-reads",
-	"icon": "question",
+	"icon": "book-alt",
 	"description": "A block to display the media format of a read (book, article, audiobook, etc.).",
 	"supports": {
 		"html": false,

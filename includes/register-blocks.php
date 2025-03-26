@@ -9,6 +9,7 @@ class MyReads_Register_Blocks {
         'my-reads/my-reads-details',
         'my-reads/my-reads-star-rating',
         'my-reads/my-reads-media-format',
+        'my-reads/my-reads-author',
     ];
 
     public function __construct() {
@@ -27,7 +28,7 @@ class MyReads_Register_Blocks {
         register_block_type( MYREADS_PATH . '/build/my-reads-listing' );
         register_block_type( MYREADS_PATH . '/build/my-reads-star-rating' );
         register_block_type( MYREADS_PATH . '/build/my-reads-media-format' );
-        // register_block_type( MYREADS_PATH . '/build/my-reads-details' );
+        register_block_type( MYREADS_PATH . '/build/my-reads-author' );
     }
 
     /**

@@ -5,7 +5,7 @@
 	"version": "0.2.2",
 	"title": "Star Rating",
 	"category": "my-reads",
-	"icon": "star-filled",
+	"icon": "star-half",
 	"description": "A block to display a star rating.",
 	"supports": {
 		"html": false,

@@ -8,9 +8,9 @@
 <div class="wp-block-column" style="flex-basis:66.66%"><!-- wp:post-title {"level":1,"fontSize":"medium"} /-->
 
 <!-- wp:group {"style":{"spacing":{"blockGap":"0"}},"layout":{"type":"flex","flexWrap":"nowrap","orientation":"vertical"}} -->
-<div class="wp-block-group"><!-- wp:paragraph {"style":{"layout":{"selfStretch":"fit","flexSize":null},"typography":{"lineHeight":"1.5"}}} -->
-<p style="line-height:1.5">Author: </p>
-<!-- /wp:paragraph -->
+<div class="wp-block-group">
+  
+<!-- wp:my-reads/author /-->
 
 <!-- wp:my-reads/media-format /-->
 
