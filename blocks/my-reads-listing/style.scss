@@ -52,6 +52,7 @@
 }
 
 .postItem-wrapper {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -59,6 +60,13 @@
 
   &.row {
     display: block;
+  }
+
+  .currently-reading {
+    position: absolute;
+    font-size: 0.9rem;
+    left: 0;
+    top: -1.5rem;
   }
 
   .image-wrapper {
@@ -71,7 +79,7 @@
       height: auto;
     }
 
-    .favorite-badge {
+    .read-badge {
       position: absolute;
       top: 0;
       left: 0;

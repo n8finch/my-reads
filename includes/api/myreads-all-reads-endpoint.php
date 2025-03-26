@@ -97,6 +97,7 @@ class MyReads_All_Reads_Endpoint {
                     '_myreads_rating' => floatval( get_post_meta( $post_id, '_myreads_rating', true ) ),
                     '_myreads_ratingStyle' => get_post_meta( $post_id, '_myreads_ratingStyle', true ) ?? 'star',
                     '_myreads_isFavorite' => get_post_meta( $post_id, '_myreads_isFavorite', true ),
+                    '_myreads_currentlyReading' => get_post_meta( $post_id, '_myreads_currentlyReading', true ),
                     '_myreads_format' => get_post_meta( $post_id, '_myreads_format', true ) ?? 'book',
                     '_myreads_amazonLink' => get_post_meta( $post_id, '_myreads_amazonLink', true ) ?? '',
                     'excerpt'         => get_the_excerpt(),

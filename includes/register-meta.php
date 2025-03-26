@@ -20,6 +20,7 @@ class MyReads_Register_Meta {
             '_myreads_rating' => [ 'type' => 'number', 'default' => 3.5 ],
             '_myreads_ratingStyle' => [ 'type' => 'string', 'default' => 'star' ],
             '_myreads_isFavorite' => [ 'type' => 'boolean', 'default' => false ],
+            '_myreads_currentlyReading' => [ 'type' => 'boolean', 'default' => false ],
             '_myreads_amazonLink' => [ 'type' => 'string', 'default' => '' ],
         ];
 

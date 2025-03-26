@@ -101,10 +101,18 @@ const MyReadsCPTSettings = () => {
 			<>
 				<ToggleControl
 					label={ __( 'Mark as favorite' ) }
-					help={ __( 'Check to mark this post as a favorite' ) }
+					help={ __( 'Mark this read as a favorite.' ) }
 					checked={ meta._myreads_isFavorite }
 					onChange={ ( checked ) =>
 						setMeta( { ...meta, _myreads_isFavorite: checked } )
+					}
+				/>
+				<ToggleControl
+					label={ __( 'Currently reading' ) }
+					help={ __( 'Show that you are currently reading this read.' ) }
+					checked={ meta._myreads_currentlyReading }
+					onChange={ ( checked ) =>
+						setMeta( { ...meta, _myreads_currentlyReading: checked } )
 					}
 				/>
 				<br />
