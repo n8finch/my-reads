@@ -109,10 +109,15 @@ const MyReadsCPTSettings = () => {
 				/>
 				<ToggleControl
 					label={ __( 'Currently reading' ) }
-					help={ __( 'Show that you are currently reading this read.' ) }
+					help={ __(
+						'Show that you are currently reading this read.'
+					) }
 					checked={ meta._myreads_currentlyReading }
 					onChange={ ( checked ) =>
-						setMeta( { ...meta, _myreads_currentlyReading: checked } )
+						setMeta( {
+							...meta,
+							_myreads_currentlyReading: checked,
+						} )
 					}
 				/>
 				<br />
