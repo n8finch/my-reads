@@ -63,7 +63,7 @@ class MyReads_Settings {
     public function myreads_file_upload( $file ) {
         // Verify the nonce for file upload.
         if ( ! isset( $_POST['myreads_csv_file_nonce'] ) ||
-            ! wp_verify_nonce( $_POST['myreads_csv_file_nonce'], 'myreads_csv_file_action' ) ) {
+            ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['myreads_csv_file_nonce'] ) ), 'myreads_csv_file_action' ) ) {
             wp_die( esc_html( __( 'Security check failed.', 'my-reads' ) ) );
         }
 
@@ -73,7 +73,7 @@ class MyReads_Settings {
         }
 
         // Use WordPress's file upload functionality
-        $uploaded_file = $_FILES['myreads_csv_file'];
+        $uploaded_file = map_deep( $_FILES['myreads_csv_file'], 'sanitize_text_field' );
 
         // Check if file is a CSV
         $file_type = wp_check_filetype( $uploaded_file['name'] );

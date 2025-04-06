@@ -24,7 +24,7 @@ class MyReads_Add_Assets {
      */
     public function enqueue_admin_settings_scripts() {
         // Enqueue script for the settings page.
-        if ( isset( $_GET['page'] ) && sanitize_text_field( $_GET['page'] ) === 'my-reads-cpt-settings' ) {
+        if ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) === 'my-reads-cpt-settings' ) {
             wp_enqueue_script( 'my-reads-settings', MYREADS_URL . '/includes/js/admin-my-reads-settings-page.js', [], MYREADS_PLUGIN_VERSION, true );
 
             // Add in extra data for the settings page.
