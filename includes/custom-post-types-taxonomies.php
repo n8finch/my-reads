@@ -199,7 +199,7 @@ class MyReads_CPT {
 
                 // Output html for taxonomy dropdown filter.
                 ?>
-                <select name="<?php echo esc_attr( $tax_slug ) ?>" id="<?php esc_attr( $tax_slug ) ?>" class="postform">
+                <select name="<?php echo esc_attr( $tax_slug ) ?>" id="<?php echo esc_attr( $tax_slug ) ?>" class="postform">
                   <option value="">All <?php echo esc_html( $tax_name ) ?></option>
                   <?php
                     foreach ( $terms as $term ) {
