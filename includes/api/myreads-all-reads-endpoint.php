@@ -121,8 +121,18 @@ class MyReads_All_Reads_Endpoint {
         }
 
         // If the my-reads directory doesn't exist, create it.
-        if ( ! file_exists( dirname( $this->all_reads_file ) ) ) {
-            mkdir( dirname( $this->all_reads_file ), 0755, true );
+        // Initialize WP_Filesystem
+        global $wp_filesystem;
+        if ( ! function_exists( 'WP_Filesystem' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+        }
+        WP_Filesystem();
+
+        $dir_path = dirname( $this->all_reads_file );
+
+        // Create the directory recursively using WP_Filesystem
+        if ( ! $wp_filesystem->is_dir( $dir_path ) ) {
+            $wp_filesystem->mkdir( $dir_path, FS_CHMOD_DIR );
         }
 
         file_put_contents( $this->all_reads_file, wp_json_encode( $posts_by_year ) );
