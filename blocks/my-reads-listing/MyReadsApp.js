@@ -16,7 +16,7 @@ const MyReadsFilterApp = ( { attributes } ) => {
 	const [ genreFilter, setGenreFilter ] = useState( 'All' );
 
 	// const allReadsEndpoint = '/wp-json/my-reads/v1/all-the-reads';
-	const allReadsEndpoint = '/wp-content/uploads/all-the-reads.json';
+	const allReadsEndpoint = '/wp-content/uploads/my-reads/all-the-reads.json';
 	const requestOptions = {
 		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },

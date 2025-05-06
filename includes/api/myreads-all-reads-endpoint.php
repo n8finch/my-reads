@@ -10,7 +10,7 @@ class MyReads_All_Reads_Endpoint {
 
     public function __construct() {
         $upload_dir = wp_upload_dir();
-        $this->all_reads_file = trailingslashit( $upload_dir['basedir'] ) . 'all-the-reads.json';
+        $this->all_reads_file = trailingslashit( $upload_dir['basedir'] ) . 'my-reads/all-the-reads.json';
         // Create a WP REST API endpoint for all the posts.
         add_action( 'rest_api_init', [ $this, 'create_all_reads_endpoint' ] );
     }
@@ -118,6 +118,11 @@ class MyReads_All_Reads_Endpoint {
             krsort( $posts_by_year );
 
             wp_reset_postdata();
+        }
+
+        // If the my-reads directory doesn't exist, create it.
+        if ( ! file_exists( dirname( $this->all_reads_file ) ) ) {
+            mkdir( dirname( $this->all_reads_file ), 0755, true );
         }
 
         file_put_contents( $this->all_reads_file, wp_json_encode( $posts_by_year ) );
