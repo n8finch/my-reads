@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 $wrapper_attributes = get_block_wrapper_attributes();
+$attributes['myReadsUploadsDir'] = trailingslashit( wp_upload_dir()['baseurl'] . '/my-reads' );
 $attributes_json = wp_json_encode( $attributes );
 
 echo sprintf(

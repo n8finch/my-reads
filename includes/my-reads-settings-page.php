@@ -173,7 +173,7 @@ class MyReads_Settings {
 
             // Define a temporary file path
             $upload_dir = wp_upload_dir();
-            $csv_path   = trailingslashit( $upload_dir['path'] ) . 'my-reads.csv';
+            $csv_path   = trailingslashit( $upload_dir['path'] ) . 'my-reads/my-reads.csv';
 
             // Initialize CSV content as a string
             $csv_content = '';

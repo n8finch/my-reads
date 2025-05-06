@@ -6,7 +6,7 @@ import GenreButtons from './components/GenreButtons';
 import SearchForm from './components/SearchForm';
 
 const MyReadsFilterApp = ( { attributes } ) => {
-	const { layout, order, useAmazonLink } = attributes;
+	const { layout, order, useAmazonLink, myReadsUploadsDir } = attributes;
 	// postsArray is the array of all posts without the years as the key.
 	const [ postsArray, setPostsArray ] = useState( [] );
 	// postsJSON is the array of all posts with the years as the key.
@@ -14,9 +14,7 @@ const MyReadsFilterApp = ( { attributes } ) => {
 	const [ search, setSearch ] = useState( '' );
 	const [ loading, setLoading ] = useState( true );
 	const [ genreFilter, setGenreFilter ] = useState( 'All' );
-
-	// const allReadsEndpoint = '/wp-json/my-reads/v1/all-the-reads';
-	const allReadsEndpoint = '/wp-content/uploads/my-reads/all-the-reads.json';
+	const allReadsEndpoint = myReadsUploadsDir + 'all-the-reads.json';
 	const requestOptions = {
 		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
