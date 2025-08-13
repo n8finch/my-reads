@@ -24,7 +24,7 @@ class MyReads_All_Reads_Endpoint {
                 'methods' => 'GET',
                 'callback' => [ $this, 'myreads_get_all_the_reads' ],
                 'permission_callback' => function () {
-                    return current_user_can( 'edit_posts' );
+                  return current_user_can( 'edit_posts' );
                 },
             ]
         );
@@ -77,6 +77,8 @@ class MyReads_All_Reads_Endpoint {
 
         $query = new WP_Query( $args );
         $posts_by_year = [];
+        $posts_read = [];
+        $currently_reading = [];
 
         if ( $query->have_posts() ) {
             while ( $query->have_posts() ) {
@@ -107,11 +109,17 @@ class MyReads_All_Reads_Endpoint {
                     'genres'          => wp_get_post_terms( $post_id, 'myreads_genre', ["fields" => "names"] ),
                 ];
 
-                // Group posts by year
-                if ( ! isset( $posts_by_year[ $year ] ) ) {
-                    $posts_by_year[ $year ] = [];
+                if ( $post_data['_myreads_currentlyReading'] ) {
+                    $currently_reading[ $year ][] = $post_data;
+                } else {
+                    $posts_read[ $year ][] = $post_data;
                 }
-                $posts_by_year[ $year ][] = $post_data;
+
+            }
+
+            // Group posts by year, with currently reading first
+            foreach ( $posts_read as $year => $posts_in_year ) {
+              $posts_by_year[ $year ] = array_merge( $currently_reading[ $year ] ?? [], $posts_in_year );
             }
 
             // Sort the posts by year
