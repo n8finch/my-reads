@@ -5,6 +5,7 @@ const PostList = ( { posts, layout, useAmazonLink } ) => {
 	if ( ! posts || posts.length === 0 ) {
 		return <p>{ __( 'No reads found.', 'my-reads' ) }</p>;
 	}
+
 	return (
 		<ul>
 			{ posts.map( ( post ) => (
