@@ -1,35 +1,43 @@
 {
-	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
-	"name": "my-reads/my-reads-listing",
-	"version": "0.2.4",
-	"title": "My Reads Listing",
-	"category": "my-reads",
-	"icon": "book",
-	"description": "A block to display a listing of books from the My Reads plugin.",
-	"attributes": {
-		"layout": {
-			"type": "string",
-			"default": "row"
-		},
-		"order": {
-			"type": "string",
-			"default": "reverse"
-		},
-		"useAmazonLink": {
-			"type": "boolean",
-			"default": false
-		}
-	},
-	"example": {},
-	"supports": {
-		"html": false,
-		"align": [ "wide", "full" ]
-	},
-	"textdomain": "my-reads",
-	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css",
-	"render": "file:./render.php",
-	"viewScript": "file:./view.js"
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "my-reads/my-reads-listing",
+  "version": "0.2.4",
+  "title": "My Reads Listing",
+  "category": "my-reads",
+  "icon": "book",
+  "description": "A block to display a listing of books from the My Reads plugin.",
+  "attributes": {
+    "showGenres": {
+      "type": "boolean",
+      "default": true
+    },
+    "genreOrderBy": {
+      "type": "string",
+      "default": "a-z"
+    },
+    "layout": {
+      "type": "string",
+      "default": "row"
+    },
+    "order": {
+      "type": "string",
+      "default": "reverse"
+    },
+    "useAmazonLink": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"]
+  },
+  "textdomain": "my-reads",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
 }
