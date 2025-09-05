@@ -83,14 +83,13 @@ class MyReads_Settings {
 
         // Move the uploaded file to the WordPress uploads directory
         $upload = wp_handle_upload( $uploaded_file, ['test_form' => false] );
+
+
         if ( isset( $upload['file'] ) ) {
             $this->import_myreads_csv( $upload['file'] );
-        } else {
-            wp_die( 'File upload failed.' );
+            // Delete the file after processing.
+            wp_delete_file( $upload['file'] );
         }
-
-        // Delete the file after processing.
-        wp_delete_file( $upload['file'] );
     }
 
     public function generate_post_content( $author ) {
@@ -116,11 +115,16 @@ class MyReads_Settings {
         // Loop through each row of CSV data
         foreach ( $csv_data as $row ) {
             // Map CSV columns to variables
-            $title = $row['Title'];
-            $author = $row['Author'];
-            $format = $row['Format'];
-            $rating = $row['Rating'];
-            $year = $row['Year'];
+            $title = $row['post_title'];
+            $excerpt = $row['post_excerpt'];
+            $author = $row['_myreads_author'];
+            $format = $row['_myreads_format'];
+            $rating = $row['_myreads_rating'];
+            $style = $row['_myreads_ratingStyle'];
+            $is_favorite = $row['_myreads_isFavorite'];
+            $amazon_link = $row['_myreads_amazonLink'];
+            $year = $row['myreads_year'];
+            $category_names = $row['category-names'];
 
             // Create a new post (for "myreads" post type)
             $post_data = [
@@ -128,13 +132,14 @@ class MyReads_Settings {
                 'post_content' => wp_kses_post( $this->generate_post_content( $author ) ),
                 'post_type'    => 'myreads',
                 'post_status'  => 'publish',
+                'post_excerpt' => sanitize_text_field( $excerpt ),
             ];
 
             // Insert the post into the database
             $post_id = wp_insert_post( $post_data );
 
             // If post creation succeeded, proceed with adding meta and taxonomies
-            if ( !is_wp_error( $post_id ) ) {
+            if ( ! is_wp_error( $post_id ) ) {
                 // Add format meta
                 update_post_meta( $post_id, '_myreads_format', sanitize_text_field( $format ) );
 
@@ -143,10 +148,20 @@ class MyReads_Settings {
                 update_post_meta( $post_id, '_myreads_ratingStyle', 'star' ); // Default rating style
 
                 // Mark as not favorite by default
-                update_post_meta( $post_id, '_myreads_isFavorite', false );
+                update_post_meta( $post_id, '_myreads_isFavorite', $is_favorite === '1' ? '1' : '0' );
+
+                // Add Amazon link meta
+                update_post_meta( $post_id, '_myreads_amazonLink', esc_url_raw( $amazon_link ) );
 
                 // Add Year taxonomy (use the Year as the term slug)
                 wp_set_object_terms( $post_id, sanitize_text_field( $year ), 'myreads_year' );
+
+                // Add Genre taxonomy (semicolon-separated list of slugs)
+                $category_names_array = array_map( 'trim', explode( ';', $category_names ) );
+
+                if ( ! empty( $category_names_array ) ) {
+                    wp_set_object_terms( $post_id, array_map( 'sanitize_text_field', $category_names_array ), 'myreads_genre', true );
+                }
             }
         }
 
@@ -173,7 +188,7 @@ class MyReads_Settings {
 
             // Define a temporary file path
             $upload_dir = wp_upload_dir();
-            $csv_path   = trailingslashit( $upload_dir['path'] ) . 'my-reads/my-reads.csv';
+            $csv_path   = trailingslashit( $upload_dir['basedir'] ) . 'my-reads/my-reads.csv';
 
             // Initialize CSV content as a string
             $csv_content = '';
@@ -188,7 +203,9 @@ class MyReads_Settings {
                 '_myreads_rating',
                 '_myreads_ratingStyle',
                 '_myreads_isFavorite',
-                '_myreads_amazonLink'
+                '_myreads_amazonLink',
+                'myreads_year',
+                'category-names',
             ] ) . "\n";
 
             // Fetch My Reads Posts
@@ -214,6 +231,8 @@ class MyReads_Settings {
                         '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_ratingStyle', true ) ) . '"',
                         '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_isFavorite', true ) ) . '"',
                         '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_amazonLink', true ) ) . '"',
+                        '"' . str_replace( '"', '""', get_the_terms( get_the_ID(), 'myreads_year' ) ? join( ';', wp_list_pluck( get_the_terms( get_the_ID(), 'myreads_year' ), 'name' ) ) : '' ) . '"',
+                        '"' . str_replace( '"', '""', get_the_terms( get_the_ID(), 'myreads_genre' ) ? join( ';', wp_list_pluck( get_the_terms( get_the_ID(), 'myreads_genre' ), 'name' ) ) : '' ) . '"',
                     ];
 
                     // Convert array to CSV format and add to content
