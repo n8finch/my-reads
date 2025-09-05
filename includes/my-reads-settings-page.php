@@ -11,6 +11,7 @@ class MyReads_Settings {
         add_action( 'admin_init', [ $this, 'myreads_register_settings' ] );
         add_action( 'admin_notices', [ $this, 'myreads_admin_notice' ] );
         add_action( 'admin_init', [ $this, 'myreads_download_csv' ] );
+        add_action( 'admin_init', [ $this, 'myreads_download_sample_csv' ] );
     }
 
     /**
@@ -169,6 +170,33 @@ class MyReads_Settings {
     }
 
     /**
+     * myreads_download_sample_csv
+     *
+     * @return void
+     */
+    public function myreads_download_sample_csv() {
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'download_sample_myreads_csv' ) {
+            if ( ! current_user_can( 'edit_posts' ) ) {
+                wp_die( esc_html( __( 'You do not have permission to download this file.', 'my-reads' ) ) );
+            }
+
+            // Define sample CSV content
+            $sample_csv_content = implode( "\n", [
+                'post_title,post_excerpt,_myreads_author,_myreads_format,_myreads_rating,_myreads_ratingStyle,_myreads_isFavorite,_myreads_amazonLink,myreads_year,category-names',
+                '"Sample Book Title","This is a sample excerpt.","Sample Author","book","5","star","1","https://www.amazon.com/sample-book","2023","Fiction;Adventure"',
+                '"Another Book Title","Another sample excerpt.","Another Author","audiobook","4","star","0","https://www.amazon.com/another-book","2022","Non-Fiction;Biography"',
+            ] ) . "\n";
+
+            // Serve the file for download
+            header( 'Content-Type: text/csv; charset=utf-8' );
+            header( 'Content-Disposition: attachment; filename=sample-my-reads.csv' );
+            echo wp_kses_post( $sample_csv_content );
+
+            exit; // Stop further execution
+        }
+    }
+
+    /**
      * myreads_download_csv
      *
      * @return void
@@ -279,10 +307,11 @@ class MyReads_Settings {
         <br/>
         <hr/>
         <h2>Upload CSV for My Reads</h2>
+        <p>Upload a CSV file to import your reads (see sample below for formatting).</p>
         <form method="post" action="options.php" enctype="multipart/form-data">
         <?php
           settings_fields( 'myreads_settings_group' );
-        do_settings_sections( 'myreads_settings' );
+          do_settings_sections( 'myreads_settings' );
         ?>
           <table class="form-table">
             <tr valign="top">
@@ -297,10 +326,19 @@ class MyReads_Settings {
         </form>
         <br/>
         <hr/>
-        <h2>Download CSV for My Reads</h2>
+        <h2>Download a CSV of My Reads</h2>
+        <p>Click the button below to download a CSV file of all your reads.</p>
         <form method="get" action="">
             <input type="hidden" name="action" value="download_myreads_csv">
             <?php submit_button( 'Download CSV' ); ?>
+        </form>
+        <br/>
+        <hr/>
+        <h2>Download a sample CSV Reads</h2>
+        <p>Use this sample as a base to import your own reads.</p>
+        <form method="get" action="">
+            <input type="hidden" name="action" value="download_sample_myreads_csv">
+            <?php submit_button( 'Download sample CSV' ); ?>
         </form>
     </div>
         <?php
