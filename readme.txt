@@ -60,6 +60,11 @@ Yes please! If you have a use case, please don't hesitate to reach out, it's bes
 1. A screenshot of a single post display.
 
 == Changelog ==
+= 0.2.5 =
+- Added ability to organize categories A-Z or by read total
+  - Toggle genre buttons on/off
+  - Select to show sorting (default A-Z)
+- Move Currently reading to front
 = 0.2 =
 Prepping for plugin release.
 = 0.1 =
