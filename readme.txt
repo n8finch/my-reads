@@ -1,6 +1,6 @@
 === My Reads ===
 Contributors: n8finch
-Tags: 
+Tags: my reads, virtual bookshelf, reading list, reading tracker, book reviews
 Donate link: http://n8finch.com/coffee
 Requires at least: 6.7
 Tested up to: 6.8
@@ -21,7 +21,7 @@ Track your reading with **My Reads**!
 
 **My Reads** is a powerful virtual bookshelf plugin for WordPress, allowing you to track and showcase your reading journey. Whether you’re reading books, audiobooks, comics, or articles, My Reads provides an intuitive way to log and display your reads.
 
-Designed for both **classic dynamic WordPress sites** and **static WordPresssites**, My Reads seamlessly integrates with your website, offering custom blocks, search functionality, CSV import, and even Amazon integration to fetch book details effortlessly.
+Designed for both **classic dynamic WordPress sites** and **static WordPress sites**, My Reads seamlessly integrates with your website, offering custom blocks, search functionality, CSV import, and even Amazon integration to fetch book details effortlessly.
 
 With My Reads, you can create a personalized reading list, rate your reads, and share your literary adventures with the world. Perfect for bloggers, book reviewers, and avid readers alike, this plugin transforms your reading experience into a visually appealing and organized format.
 
@@ -31,7 +31,7 @@ Whether you’re a casual reader or a dedicated bibliophile, My Reads is the ult
 
 - 📚 **Custom Post Type:** My Reads creates a dedicated post type to store and display your reading list.
 - 🏗 **Gutenberg Blocks Included:**
-  - **Listing Block** – Display your reading list by year.
+  - **Listing "Bookshelf" Block** – Display your reading list by year. This is your virtual bookshelf!
   - **Star Rating Block** – Easily rate each read.
   - **Media Format Block** – Specify the format (book, audiobook, comic, etc.).
 - 🔍 **Search & Filter:** Quickly find books by title, category, year, and more.
@@ -54,7 +54,7 @@ Have a feature request or feedback? Reach out via the **[WordPress support forum
 
 == Frequently Asked Questions ==
 = Can I make suggestions or requests? =
-Yes please! If you have a use case, please don't hesitate to reach out, it's best to [open an issue on Github](https://github.com/n8finch/my-reads/issues/).
+Yes please! If you have a use case, please don't hesitate to reach out in the forum on WordPress.org, or [open an issue on Github](https://github.com/n8finch/my-reads/issues/).
 
 == Screenshots ==
 1. A screenshot of a single post display.
