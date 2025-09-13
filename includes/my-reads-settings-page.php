@@ -58,6 +58,22 @@ class MyReads_Settings {
             'description' => 'CSV file for My Reads',
             'sanitize_callback' => [ $this, 'myreads_file_upload' ]
         ] );
+
+        if ( isset( $_POST['action'] ) && $_POST['action'] === 'regenerate_myreads_json_on_save' ) {
+            // Verify the nonce
+            if ( ! isset( $_POST['regenerate_myreads_json_nonce'] ) ||
+                ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['regenerate_myreads_json_nonce'] ) ), 'regenerate_myreads_json_action' ) ) {
+                wp_die( esc_html( __( 'Security check failed.', 'my-reads' ) ) );
+            }
+
+            // Save the setting
+            $auto_regenerate = isset( $_POST['auto_regenerate_json'] ) ? '1' : '0';
+            update_option( 'myreads_auto_regenerate_json', $auto_regenerate );
+
+            // Redirect to avoid resubmission
+            wp_redirect( admin_url( 'edit.php?post_type=myreads&page=my-reads-cpt-settings&settings-updated=true' ) );
+            exit;
+        }
     }
 
     // Handle the file upload
@@ -305,6 +321,19 @@ class MyReads_Settings {
         </button>
         <br/>
         <br/>
+        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+            <input type="hidden" name="action" value="regenerate_myreads_json_on_save">
+            <?php wp_nonce_field( 'regenerate_myreads_json_action', 'regenerate_myreads_json_nonce' ); ?>
+            <p>Would you like to automatically regenerate the JSON file after each save?</p>
+            <label>
+                <input type="checkbox" id="auto-regenerate-json" name="auto_regenerate_json" <?php checked( get_option( 'myreads_auto_regenerate_json', '0' ), '1' ); ?> />
+                Yes, automatically regenerate after each save.
+            </label><br/>
+            <small><em>
+                Note: Enabling this option may impact performance if you frequently update your reads.
+            </em></small>
+            <?php submit_button( 'Save' ); ?>
+        </form>
         <hr/>
         <h2>Upload CSV for My Reads</h2>
         <p>Upload a CSV file to import your reads (see sample below for formatting).</p>
