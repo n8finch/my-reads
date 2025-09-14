@@ -11,6 +11,7 @@ class MyReads_Settings {
         add_action( 'admin_init', [ $this, 'myreads_register_settings' ] );
         add_action( 'admin_notices', [ $this, 'myreads_admin_notice' ] );
         add_action( 'admin_init', [ $this, 'myreads_download_csv' ] );
+        add_action( 'admin_init', [ $this, 'myreads_download_sample_csv' ] );
     }
 
     /**
@@ -57,6 +58,22 @@ class MyReads_Settings {
             'description' => 'CSV file for My Reads',
             'sanitize_callback' => [ $this, 'myreads_file_upload' ]
         ] );
+
+        if ( isset( $_POST['action'] ) && $_POST['action'] === 'regenerate_myreads_json_on_save' ) {
+            // Verify the nonce
+            if ( ! isset( $_POST['regenerate_myreads_json_nonce'] ) ||
+                ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['regenerate_myreads_json_nonce'] ) ), 'regenerate_myreads_json_action' ) ) {
+                wp_die( esc_html( __( 'Security check failed.', 'my-reads' ) ) );
+            }
+
+            // Save the setting
+            $auto_regenerate = isset( $_POST['auto_regenerate_json'] ) ? '1' : '0';
+            update_option( 'myreads_auto_regenerate_json', $auto_regenerate );
+
+            // Redirect to avoid resubmission
+            wp_redirect( admin_url( 'edit.php?post_type=myreads&page=my-reads-cpt-settings&settings-updated=true' ) );
+            exit;
+        }
     }
 
     // Handle the file upload
@@ -83,14 +100,13 @@ class MyReads_Settings {
 
         // Move the uploaded file to the WordPress uploads directory
         $upload = wp_handle_upload( $uploaded_file, ['test_form' => false] );
+
+
         if ( isset( $upload['file'] ) ) {
             $this->import_myreads_csv( $upload['file'] );
-        } else {
-            wp_die( 'File upload failed.' );
+            // Delete the file after processing.
+            wp_delete_file( $upload['file'] );
         }
-
-        // Delete the file after processing.
-        wp_delete_file( $upload['file'] );
     }
 
     public function generate_post_content( $author ) {
@@ -116,11 +132,16 @@ class MyReads_Settings {
         // Loop through each row of CSV data
         foreach ( $csv_data as $row ) {
             // Map CSV columns to variables
-            $title = $row['Title'];
-            $author = $row['Author'];
-            $format = $row['Format'];
-            $rating = $row['Rating'];
-            $year = $row['Year'];
+            $title = $row['post_title'];
+            $excerpt = $row['post_excerpt'];
+            $author = $row['_myreads_author'];
+            $format = $row['_myreads_format'];
+            $rating = $row['_myreads_rating'];
+            $style = $row['_myreads_ratingStyle'];
+            $is_favorite = $row['_myreads_isFavorite'];
+            $amazon_link = $row['_myreads_amazonLink'];
+            $year = $row['myreads_year'];
+            $category_names = $row['category-names'];
 
             // Create a new post (for "myreads" post type)
             $post_data = [
@@ -128,13 +149,14 @@ class MyReads_Settings {
                 'post_content' => wp_kses_post( $this->generate_post_content( $author ) ),
                 'post_type'    => 'myreads',
                 'post_status'  => 'publish',
+                'post_excerpt' => sanitize_text_field( $excerpt ),
             ];
 
             // Insert the post into the database
             $post_id = wp_insert_post( $post_data );
 
             // If post creation succeeded, proceed with adding meta and taxonomies
-            if ( !is_wp_error( $post_id ) ) {
+            if ( ! is_wp_error( $post_id ) ) {
                 // Add format meta
                 update_post_meta( $post_id, '_myreads_format', sanitize_text_field( $format ) );
 
@@ -143,14 +165,51 @@ class MyReads_Settings {
                 update_post_meta( $post_id, '_myreads_ratingStyle', 'star' ); // Default rating style
 
                 // Mark as not favorite by default
-                update_post_meta( $post_id, '_myreads_isFavorite', false );
+                update_post_meta( $post_id, '_myreads_isFavorite', $is_favorite === '1' ? '1' : '0' );
+
+                // Add Amazon link meta
+                update_post_meta( $post_id, '_myreads_amazonLink', esc_url_raw( $amazon_link ) );
 
                 // Add Year taxonomy (use the Year as the term slug)
                 wp_set_object_terms( $post_id, sanitize_text_field( $year ), 'myreads_year' );
+
+                // Add Genre taxonomy (semicolon-separated list of slugs)
+                $category_names_array = array_map( 'trim', explode( ';', $category_names ) );
+
+                if ( ! empty( $category_names_array ) ) {
+                    wp_set_object_terms( $post_id, array_map( 'sanitize_text_field', $category_names_array ), 'myreads_genre', true );
+                }
             }
         }
 
         set_transient( 'myreads_csv_import_success', 'CSV file uploaded and imported successfully!', 5 ); // 5 seconds
+    }
+
+    /**
+     * myreads_download_sample_csv
+     *
+     * @return void
+     */
+    public function myreads_download_sample_csv() {
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'download_sample_myreads_csv' ) {
+            if ( ! current_user_can( 'edit_posts' ) ) {
+                wp_die( esc_html( __( 'You do not have permission to download this file.', 'my-reads' ) ) );
+            }
+
+            // Define sample CSV content
+            $sample_csv_content = implode( "\n", [
+                'post_title,post_excerpt,_myreads_author,_myreads_format,_myreads_rating,_myreads_ratingStyle,_myreads_isFavorite,_myreads_amazonLink,myreads_year,category-names',
+                '"Sample Book Title","This is a sample excerpt.","Sample Author","book","5","star","1","https://www.amazon.com/sample-book","2023","Fiction;Adventure"',
+                '"Another Book Title","Another sample excerpt.","Another Author","audiobook","4","star","0","https://www.amazon.com/another-book","2022","Non-Fiction;Biography"',
+            ] ) . "\n";
+
+            // Serve the file for download
+            header( 'Content-Type: text/csv; charset=utf-8' );
+            header( 'Content-Disposition: attachment; filename=sample-my-reads.csv' );
+            echo wp_kses_post( $sample_csv_content );
+
+            exit; // Stop further execution
+        }
     }
 
     /**
@@ -173,7 +232,7 @@ class MyReads_Settings {
 
             // Define a temporary file path
             $upload_dir = wp_upload_dir();
-            $csv_path   = trailingslashit( $upload_dir['path'] ) . 'my-reads/my-reads.csv';
+            $csv_path   = trailingslashit( $upload_dir['basedir'] ) . 'my-reads/my-reads.csv';
 
             // Initialize CSV content as a string
             $csv_content = '';
@@ -188,7 +247,9 @@ class MyReads_Settings {
                 '_myreads_rating',
                 '_myreads_ratingStyle',
                 '_myreads_isFavorite',
-                '_myreads_amazonLink'
+                '_myreads_amazonLink',
+                'myreads_year',
+                'category-names',
             ] ) . "\n";
 
             // Fetch My Reads Posts
@@ -214,6 +275,8 @@ class MyReads_Settings {
                         '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_ratingStyle', true ) ) . '"',
                         '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_isFavorite', true ) ) . '"',
                         '"' . str_replace( '"', '""', get_post_meta( get_the_ID(), '_myreads_amazonLink', true ) ) . '"',
+                        '"' . str_replace( '"', '""', get_the_terms( get_the_ID(), 'myreads_year' ) ? join( ';', wp_list_pluck( get_the_terms( get_the_ID(), 'myreads_year' ), 'name' ) ) : '' ) . '"',
+                        '"' . str_replace( '"', '""', get_the_terms( get_the_ID(), 'myreads_genre' ) ? join( ';', wp_list_pluck( get_the_terms( get_the_ID(), 'myreads_genre' ), 'name' ) ) : '' ) . '"',
                     ];
 
                     // Convert array to CSV format and add to content
@@ -258,12 +321,26 @@ class MyReads_Settings {
         </button>
         <br/>
         <br/>
+        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+            <input type="hidden" name="action" value="regenerate_myreads_json_on_save">
+            <?php wp_nonce_field( 'regenerate_myreads_json_action', 'regenerate_myreads_json_nonce' ); ?>
+            <p>Would you like to automatically regenerate the JSON file after each save?</p>
+            <label>
+                <input type="checkbox" id="auto-regenerate-json" name="auto_regenerate_json" <?php checked( get_option( 'myreads_auto_regenerate_json', '0' ), '1' ); ?> />
+                Yes, automatically regenerate after each save.
+            </label><br/>
+            <small><em>
+                Note: Enabling this option may impact performance if you frequently update your reads.
+            </em></small>
+            <?php submit_button( 'Save' ); ?>
+        </form>
         <hr/>
         <h2>Upload CSV for My Reads</h2>
+        <p>Upload a CSV file to import your reads (see sample below for formatting).</p>
         <form method="post" action="options.php" enctype="multipart/form-data">
         <?php
           settings_fields( 'myreads_settings_group' );
-        do_settings_sections( 'myreads_settings' );
+          do_settings_sections( 'myreads_settings' );
         ?>
           <table class="form-table">
             <tr valign="top">
@@ -278,10 +355,19 @@ class MyReads_Settings {
         </form>
         <br/>
         <hr/>
-        <h2>Download CSV for My Reads</h2>
+        <h2>Download a CSV of My Reads</h2>
+        <p>Click the button below to download a CSV file of all your reads.</p>
         <form method="get" action="">
             <input type="hidden" name="action" value="download_myreads_csv">
             <?php submit_button( 'Download CSV' ); ?>
+        </form>
+        <br/>
+        <hr/>
+        <h2>Download a sample CSV Reads</h2>
+        <p>Use this sample as a base to import your own reads.</p>
+        <form method="get" action="">
+            <input type="hidden" name="action" value="download_sample_myreads_csv">
+            <?php submit_button( 'Download sample CSV' ); ?>
         </form>
     </div>
         <?php
