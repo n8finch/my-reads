@@ -9,7 +9,7 @@ Stable tag: 0.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Track your reading with My Reads! A plugin for you to display a virtual bookshelf of your reads. Review what you're reading, rate it, mark it as a favorite, and more.
+Track your reading with My Reads! A plugin for you to display a virtual bookshelf of your reads. Review what you're reading, rate, favorite, and more.
 
 == Description ==
 
