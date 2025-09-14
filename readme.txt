@@ -58,6 +58,10 @@ Yes please! If you have a use case, please don't hesitate to reach out in the fo
 1. A screenshot of a single post display.
 
 == Changelog ==
+= 0.2.6 =
+- Settings option to automate JSON regeneration
+- Readme updates
+- CSV upload and download fixes
 = 0.2.5 =
 - Added ability to organize categories A-Z or by read total
   - Toggle genre buttons on/off
