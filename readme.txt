@@ -45,6 +45,15 @@ Whether you’re a casual reader or a dedicated bibliophile, My Reads is the ult
 - ⭐ **Prioritize Favorites** – Move your favorite reads to the top of the list. 
 - 🧰 **Shortcode** - ability to add the My Reads listing via shortcode and not just a block.
 
+### A note on caching
+To optimize performance, My Reads generates a JSON file containing your reading list data. This file is used to quickly render the bookshelf on your site. You can choose to regenerate this JSON file manually or set it to regenerate automatically whenever you add or update a read.
+
+If you are using a caching plugin or service, ensure that the JSON file is not cached to avoid displaying outdated information. Please exclude these URL patterns from your caching rules:
+```
+/wp-content/uploads/my-reads/reads.json
+/wp-json/my-reads/v1/all-the-reads
+```
+
 Have a feature request or feedback? Reach out via the **[WordPress support forums](https://wordpress.org/support/plugin/my-reads/)** or **[GitHub](https://github.com/n8finch/my-reads/issues)**!
 
 == Installation ==
