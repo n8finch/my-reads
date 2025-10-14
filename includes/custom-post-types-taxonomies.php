@@ -73,7 +73,7 @@ class MyReads_CPT {
             'rewrite' => $rewrite,
             'show_in_rest' => true,
             'show_ui' => true,
-            'supports' => [ 'title', 'editor', 'excerpt', 'revisions', 'help', 'custom-fields', 'thumbnail' ],
+            'supports' => [ 'title', 'editor', 'excerpt', 'comments', 'revisions', 'help', 'custom-fields', 'thumbnail' ],
             'template' => [
                 [
                     'core/pattern',

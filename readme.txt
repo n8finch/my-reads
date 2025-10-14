@@ -4,8 +4,8 @@ Tags: my reads, virtual bookshelf, reading list, reading tracker, book reviews
 Donate link: http://n8finch.com/coffee
 Requires at least: 6.7
 Tested up to: 6.8
-Requires PHP: 8.0
-Stable tag: 0.2.6
+Requires PHP: 7.4
+Stable tag: 0.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,9 @@ Yes please! If you have a use case, please don't hesitate to reach out in the fo
 1. A screenshot of a single post display.
 
 == Changelog ==
+= 0.2.7 =
+- Star rating block: If rating is 0, show "Not yet rated" message.
+- Added support for comments on My Reads posts.
 = 0.2.6 =
 - Settings option to automate JSON regeneration
 - Readme updates
