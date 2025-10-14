@@ -58,7 +58,8 @@ class MyReads_Add_Assets {
             'slotfill-my-reads',
             MYREADS_URL . '/build/slotfill-my-reads/index.js',
             $asset_file['dependencies'],
-            $asset_file['version']
+            $asset_file['version'],
+            true
         );
         wp_enqueue_script( 'slotfill-my-reads' );
 
