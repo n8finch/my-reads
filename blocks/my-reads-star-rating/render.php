@@ -15,6 +15,7 @@ $ratingStyle = get_post_meta( get_the_ID(), '_myreads_ratingStyle', true );
 if ( ! $ratingStyle ) {
     $ratingStyle = 'star';
 }
+
 // Generate the rating emojis.
 for ( $i = 0.5; $i < $rating; $i += 1.0 ) {
     $ratingEmojis .= $ratingStyle === 'star' ? '⭐️' : '❤️';
@@ -25,6 +26,10 @@ if ( fmod( $rating, 1.0 ) !== 0.0 ) {
     $ratingEmojis .= '½';
 }
 
+// If rating is 0, show 'Not yet rated' message
+if ( 0 === intval( $rating ) ) {
+   $ratingEmojis = __( 'Not yet rated', 'my-reads' );
+}
 
 ?>
 <p <?php echo esc_attr( get_block_wrapper_attributes() ) ?>>
