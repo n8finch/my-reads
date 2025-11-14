@@ -14,7 +14,7 @@
 
 <!-- wp:my-reads/media-format /-->
 
-<!-- wp:my-reads/star-rating {"rating":3.5} /--></div>
+<!-- wp:my-reads/star-rating /--></div>
 <!-- /wp:group -->
 
 <!-- wp:buttons -->
