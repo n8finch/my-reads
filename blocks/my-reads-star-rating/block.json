@@ -20,7 +20,7 @@
 	"attributes": {
 		"rating": {
 			"type": "number",
-			"default": 5
+			"default": 0
 		},
 		"ratingStyle": {
 			"type": "string",

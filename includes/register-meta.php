@@ -17,7 +17,7 @@ class MyReads_Register_Meta {
         $post_meta = [
             '_myreads_author' => [ 'type' => 'string', 'default' => '' ],
             '_myreads_format' => [ 'type' => 'string', 'default' => 'book' ],
-            '_myreads_rating' => [ 'type' => 'number', 'default' => 3.5 ],
+            '_myreads_rating' => [ 'type' => 'number', 'default' => 0 ],
             '_myreads_ratingStyle' => [ 'type' => 'string', 'default' => 'star' ],
             '_myreads_isFavorite' => [ 'type' => 'boolean', 'default' => false ],
             '_myreads_currentlyReading' => [ 'type' => 'boolean', 'default' => false ],
