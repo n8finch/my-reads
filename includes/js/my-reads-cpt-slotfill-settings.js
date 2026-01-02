@@ -128,6 +128,7 @@ const MyReadsCPTSettings = () => {
 						setMeta( { ...meta, _myreads_amazonLink: value } )
 					}
 					disabled={ loading }
+          help={ __( 'Enter the Amazon URL for this read to fetch the image and title.' ) }
 				/>
 				<br />
 				<Button

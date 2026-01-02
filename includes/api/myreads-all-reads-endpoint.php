@@ -114,12 +114,21 @@ class MyReads_All_Reads_Endpoint {
                 } else {
                     $posts_read[ $year ][] = $post_data;
                 }
+            }
 
+            // Group posts by year
+            foreach ( $posts_read as $year => $posts_in_year ) {
+              $posts_by_year[ $year ] = $posts_in_year;
             }
 
             // Group posts by year, with currently reading first
-            foreach ( $posts_read as $year => $posts_in_year ) {
-              $posts_by_year[ $year ] = array_merge( $currently_reading[ $year ] ?? [], $posts_in_year );
+            foreach ( $currently_reading as $year => $posts_in_year ) {
+              // Ensure the year key exists.
+              if ( ! isset( $posts_by_year[ $year ] ) ) {
+                  $posts_by_year[ $year ] = [];
+              }
+              // Prepend currently reading posts to the year's posts.
+              array_unshift( $posts_by_year[ $year ], ...$posts_in_year );
             }
 
             // Sort the posts by year
