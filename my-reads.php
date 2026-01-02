@@ -5,8 +5,8 @@
  * Plugin URI: 		    https://github.com/n8finch/my-reads
  * Description:       A plugin to allow users to track their reading list.
  * Requires at least: 6.7
- * Requires PHP:      7.4
- * Version:           0.2.8
+ * Requires PHP:      8.0
+ * Version:           1.0.0
  * Author:            Nate Finch
  * Author URI:        https://n8finch.com
  * License:           GPL-2.0-or-later
