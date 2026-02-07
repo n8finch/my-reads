@@ -74,6 +74,23 @@ class MyReads_Settings {
             wp_redirect( admin_url( 'edit.php?post_type=myreads&page=my-reads-cpt-settings&settings-updated=true' ) );
             exit;
         }
+
+        // Handle the default pattern selection
+        if ( $_POST && isset( $_POST['myreads_default_pattern'] ) ) {
+            // Verify the nonce
+            if ( ! isset( $_POST['myreads_default_pattern_nonce'] ) ||
+                ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['myreads_default_pattern_nonce'] ) ), 'myreads_default_pattern_action' ) ) {
+                wp_die( esc_html( __( 'Security check failed.', 'my-reads' ) ) );
+            }
+
+            // Save the selected pattern
+            $selected_pattern = sanitize_text_field( wp_unslash( $_POST['myreads_default_pattern'] ) );
+            update_option( 'myreads_default_pattern', $selected_pattern );
+
+            // Redirect to avoid resubmission
+            wp_redirect( admin_url( 'edit.php?post_type=myreads&page=my-reads-cpt-settings&settings-updated=true' ) );
+            exit;
+        }
     }
 
     // Handle the file upload
@@ -302,6 +319,38 @@ class MyReads_Settings {
         }
     }
 
+    public function myreads_get_custom_patterns() {
+        $patterns = [];
+
+        $selected_pattern = get_option( 'myreads_default_pattern', 'my-reads-default' );
+
+        $args = [
+          'post_type'      => 'wp_block',
+          'post_status'    => 'publish',
+          'posts_per_page' => -1,
+          'tax_query'      => [
+              [
+                  'taxonomy' => 'wp_pattern_category',
+                  'field'    => 'slug',
+                  'terms'    => 'my-reads',
+              ],
+          ],
+        ];
+
+        // Get patterns that are in the "My Reads" category
+        $my_reads_patterns = get_posts( $args );
+
+        foreach ( $my_reads_patterns as $pattern ) {
+            $patterns[] = [
+                'slug' => $pattern->post_name,
+                'name' => $pattern->post_title,
+                'selected' => $selected_pattern === $pattern->post_name,
+            ];
+        }
+
+        return $patterns;
+    }
+
     /**
      * My Reads CPT settings submenu page HTML
      * @return void
@@ -310,8 +359,37 @@ class MyReads_Settings {
         // Display My Reads settings page.
         ?>
       <div class="wrap">
-        <h1><?php wp_kses_post( __( 'My Reads Settings', 'my-reads' ) ) ?></h1>
-        <h2>Regenerate My Reads JSON</h2>
+        <h1><?php echo esc_html__( 'My Reads Settings', 'my-reads' ); ?></h1>
+        <h2><?php echo esc_html__( 'Choose a default pattern', 'my-reads' ); ?></h2>
+        <form method="post" action="options.php" enctype="multipart/form-data">
+          <p style="max-width: 600px;"><?php printf( __( 'My Reads comes with a basic pattern that loads on every new My Reads post. If you would like create your own pattern to use:' ) ) ?>
+            <ol>
+              <li><?php printf( __( 'Create a new pattern in the <a href="%s">Patterns directory</a>', 'my-reads' ), esc_url( admin_url('/site-editor.php?p=/pattern' ) ) )?></li>
+              <li><?php printf( __( 'Add it to the "My Reads" category (otherwise you will not be able to select it here)', 'my-reads' ), esc_url( admin_url('/site-editor.php?p=/pattern' ) ) )?></li>
+              <li><?php printf( __( 'Select the pattern you created here', 'my-reads' ), esc_url( admin_url('/site-editor.php?p=/pattern' ) ) )?></li>
+            </ol>
+          </p>
+          <table class="form-table">
+            <tr valign="top">
+              <th scope="row"><?php echo esc_html__( 'Default Pattern', 'my-reads' ); ?></th>
+              <td>
+                <select name="myreads_default_pattern">
+                  <option value="my-reads-default" <?php selected( get_option( 'myreads_default_pattern', 'my-reads-default' ), 'my-reads-default' ); ?>><?php echo esc_html__( 'Default My Reads pattern', 'my-reads' ); ?></option>
+                  <?php
+                    $patterns = $this->myreads_get_custom_patterns();
+                    foreach ( $patterns as $pattern ) {
+                        echo '<option value="' . esc_attr( $pattern['slug'] ) . '" ' . selected( $pattern['selected'], true, false ) . '>' . esc_html( $pattern['name'] ) . '</option>';
+                    }
+                  ?>
+                </select>
+                <?php wp_nonce_field( 'myreads_default_pattern_action', 'myreads_default_pattern_nonce' ); ?>
+              </td>
+            </tr>
+          </table>
+          <?php submit_button( 'Save' ); ?>
+        </form>
+        <hr/>
+        <h2><?php echo esc_html__( 'Manually regenerate My Reads JSON', 'my-reads' ); ?></h2>
         <p>
             Click the button below to regenerate the JSON file for all reads.<br/>
             This will create an updated file based on the current reads.
@@ -321,6 +399,8 @@ class MyReads_Settings {
         </button>
         <br/>
         <br/>
+        <hr/>
+        <h2><?php echo esc_html__( 'Automatically regenerate My Reads JSON', 'my-reads' ); ?></h2>
         <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
             <input type="hidden" name="action" value="regenerate_myreads_json_on_save">
             <?php wp_nonce_field( 'regenerate_myreads_json_action', 'regenerate_myreads_json_nonce' ); ?>
@@ -335,8 +415,8 @@ class MyReads_Settings {
             <?php submit_button( 'Save' ); ?>
         </form>
         <hr/>
-        <h2>Upload CSV for My Reads</h2>
-        <p>Upload a CSV file to import your reads (see sample below for formatting).</p>
+        <h2><?php echo esc_html__( 'Upload CSV for My Reads', 'my-reads' ); ?></h2>
+        <p><?php echo esc_html__( 'Upload a CSV file to import your reads (see sample below for formatting).', 'my-reads' ); ?></p>
         <form method="post" action="options.php" enctype="multipart/form-data">
         <?php
           settings_fields( 'myreads_settings_group' );
@@ -344,7 +424,7 @@ class MyReads_Settings {
         ?>
           <table class="form-table">
             <tr valign="top">
-              <th scope="row">CSV File Upload</th>
+              <th scope="row"><?php echo esc_html__( 'CSV File Upload', 'my-reads' ); ?></th>
               <td>
                 <input type="file" name="myreads_csv_file" accept=".csv" />
                 <?php wp_nonce_field( 'myreads_csv_file_action', 'myreads_csv_file_nonce' ); ?>
@@ -355,19 +435,19 @@ class MyReads_Settings {
         </form>
         <br/>
         <hr/>
-        <h2>Download a CSV of My Reads</h2>
-        <p>Click the button below to download a CSV file of all your reads.</p>
+        <h2><?php echo esc_html__( 'Download a CSV of My Reads', 'my-reads' ); ?></h2>
+        <p><?php echo esc_html__( 'Click the button below to download a CSV file of all your reads.', 'my-reads' ); ?></p>
         <form method="get" action="">
             <input type="hidden" name="action" value="download_myreads_csv">
-            <?php submit_button( 'Download CSV' ); ?>
+            <?php submit_button( __( 'Download CSV', 'my-reads' ) ); ?>
         </form>
         <br/>
         <hr/>
-        <h2>Download a sample CSV Reads</h2>
-        <p>Use this sample as a base to import your own reads.</p>
+        <h2><?php echo esc_html__( 'Download a sample CSV Reads', 'my-reads' ); ?></h2>
+        <p><?php echo esc_html__( 'Use this sample as a base to import your own reads.', 'my-reads' ); ?></p>
         <form method="get" action="">
             <input type="hidden" name="action" value="download_sample_myreads_csv">
-            <?php submit_button( 'Download sample CSV' ); ?>
+            <?php submit_button( __( 'Download sample CSV', 'my-reads' ) ); ?>
         </form>
     </div>
         <?php

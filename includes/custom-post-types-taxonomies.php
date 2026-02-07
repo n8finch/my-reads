@@ -16,6 +16,7 @@ class MyReads_CPT {
         add_action( 'manage_myreads_posts_custom_column', [ $this, 'manage_myreads_columns' ], 10, 2 );
         add_action( 'restrict_manage_posts', [ $this, 'myreads_restrict_manage_posts' ] );
         add_action( 'pre_get_posts', [ $this, 'myreads_genre_taxonomy_sort_order' ] );
+        add_filter( 'default_content', [ $this, 'inject_detached_pattern_content' ], 999, 2 );
     }
 
     public function maybe_flush_rewrites() {
@@ -31,6 +32,57 @@ class MyReads_CPT {
             delete_transient( 'myreads_flush_rewrites' );
             update_option( 'myreads_plugin_version', $data['Version'], true );
         }
+    }
+
+    /**
+     * Inject the raw content of a wp_block into new 'myreads' posts.
+     */
+    public function inject_detached_pattern_content( $content, $post ) {
+      // echo '<pre>';
+      // var_dump( $post->post_content );
+      // wp_die();
+        if ( $post->post_type !== 'myreads' && ! empty( $post->post_content ) ) {
+          return $content;
+        }
+        
+        $default_pattern = get_option( 'myreads_default_pattern', 'my-reads-default' );
+        
+        // If no custom pattern is set, or if the default pattern is selected, return the original content (which will be the default pattern).
+        if ( ! $default_pattern || $default_pattern === 'my-reads-default' ) {
+          return file_get_contents( MYREADS_PATH . '/patterns/my-reads-default.php' ) ?? $content;
+        }
+          
+        // 1. Fetch the User-Created Pattern by ID (or slug)
+        $pattern_post = get_page_by_path( $default_pattern, OBJECT, 'wp_block' );
+        
+        // Check if the pattern post exists and is of the correct post type.
+        if ( $pattern_post && 'wp_block' === $pattern_post->post_type ) {
+          // Return the raw block HTML. 
+          return $pattern_post->post_content;
+        }
+
+        
+        return $content;
+    }
+
+    public function get_default_pattern() {
+        // $default_pattern = get_option( 'myreads_default_pattern', 'my-reads-default' );
+
+        // if ( $default_pattern && $default_pattern !== 'my-reads-default' ) {
+        //   // Get post content by slug
+        //   $pattern_post = get_page_by_path( $default_pattern, OBJECT, 'wp_block' );
+        //   if ( get_class( $pattern_post ) === 'WP_Post' ) {
+        //       return [ [ 'core/block', [ 'ref' => $pattern_post->ID ] ] ];
+        //   }
+        // }
+        return [
+            [
+                'core/pattern',
+                [
+                    'slug' => 'my-reads/my-reads-default',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -74,14 +126,7 @@ class MyReads_CPT {
             'show_in_rest' => true,
             'show_ui' => true,
             'supports' => [ 'title', 'editor', 'excerpt', 'comments', 'revisions', 'help', 'custom-fields', 'thumbnail' ],
-            'template' => [
-                [
-                    'core/pattern',
-                    [
-                        'slug' => 'my-reads/my-reads-default',
-                    ],
-                ],
-            ],
+            // 'template' => $this->get_default_pattern()
         ];
 
         // add a filter for customizing post types from a child theme or plugin
