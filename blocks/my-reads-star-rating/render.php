@@ -28,7 +28,7 @@ if ( fmod( $rating, 1.0 ) !== 0.0 ) {
 
 // If rating is 0, show 'Not yet rated' message
 if ( 0 === intval( $rating ) ) {
-   $ratingEmojis = __( 'Not yet rated', 'my-reads' );
+    $ratingEmojis = __( 'Not yet rated', 'my-reads' );
 }
 
 ?>

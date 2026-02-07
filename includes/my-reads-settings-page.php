@@ -325,16 +325,16 @@ class MyReads_Settings {
         $selected_pattern = get_option( 'myreads_default_pattern', 'my-reads-default' );
 
         $args = [
-          'post_type'      => 'wp_block',
-          'post_status'    => 'publish',
-          'posts_per_page' => -1,
-          'tax_query'      => [
-              [
-                  'taxonomy' => 'wp_pattern_category',
-                  'field'    => 'slug',
-                  'terms'    => 'my-reads',
-              ],
-          ],
+            'post_type'      => 'wp_block',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'tax_query'      => [
+                [
+                    'taxonomy' => 'wp_pattern_category',
+                    'field'    => 'slug',
+                    'terms'    => 'my-reads',
+                ],
+            ],
         ];
 
         // Get patterns that are in the "My Reads" category
@@ -364,9 +364,9 @@ class MyReads_Settings {
         <form method="post" action="options.php" enctype="multipart/form-data">
           <p style="max-width: 600px;"><?php printf( __( 'My Reads comes with a basic pattern that loads on every new My Reads post. If you would like create your own pattern to use:' ) ) ?>
             <ol>
-              <li><?php printf( __( 'Create a new pattern in the <a href="%s">Patterns directory</a>', 'my-reads' ), esc_url( admin_url('/site-editor.php?p=/pattern' ) ) )?></li>
-              <li><?php printf( __( 'Add it to the "My Reads" category (otherwise you will not be able to select it here)', 'my-reads' ), esc_url( admin_url('/site-editor.php?p=/pattern' ) ) )?></li>
-              <li><?php printf( __( 'Select the pattern you created here', 'my-reads' ), esc_url( admin_url('/site-editor.php?p=/pattern' ) ) )?></li>
+              <li><?php printf( __( 'Create a new pattern in the <a href="%s">Patterns directory</a>', 'my-reads' ), esc_url( admin_url( '/site-editor.php?p=/pattern' ) ) )?></li>
+              <li><?php printf( __( 'Add it to the "My Reads" category (otherwise you will not be able to select it here)', 'my-reads' ), esc_url( admin_url( '/site-editor.php?p=/pattern' ) ) )?></li>
+              <li><?php printf( __( 'Select the pattern you created here', 'my-reads' ), esc_url( admin_url( '/site-editor.php?p=/pattern' ) ) )?></li>
             </ol>
           </p>
           <table class="form-table">
@@ -377,10 +377,10 @@ class MyReads_Settings {
                   <option value="my-reads-default" <?php selected( get_option( 'myreads_default_pattern', 'my-reads-default' ), 'my-reads-default' ); ?>><?php echo esc_html__( 'Default My Reads pattern', 'my-reads' ); ?></option>
                   <?php
                     $patterns = $this->myreads_get_custom_patterns();
-                    foreach ( $patterns as $pattern ) {
-                        echo '<option value="' . esc_attr( $pattern['slug'] ) . '" ' . selected( $pattern['selected'], true, false ) . '>' . esc_html( $pattern['name'] ) . '</option>';
-                    }
-                  ?>
+        foreach ( $patterns as $pattern ) {
+            echo '<option value="' . esc_attr( $pattern['slug'] ) . '" ' . selected( $pattern['selected'], true, false ) . '>' . esc_html( $pattern['name'] ) . '</option>';
+        }
+        ?>
                 </select>
                 <?php wp_nonce_field( 'myreads_default_pattern_action', 'myreads_default_pattern_nonce' ); ?>
               </td>
@@ -420,7 +420,7 @@ class MyReads_Settings {
         <form method="post" action="options.php" enctype="multipart/form-data">
         <?php
           settings_fields( 'myreads_settings_group' );
-          do_settings_sections( 'myreads_settings' );
+        do_settings_sections( 'myreads_settings' );
         ?>
           <table class="form-table">
             <tr valign="top">

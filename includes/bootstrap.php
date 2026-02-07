@@ -42,7 +42,7 @@ class MyReads_Bootstrap {
     /**
      * myreads_generate_json_on_save
      * Trigger JSON regeneration when a 'myreads' post is saved
-     * 
+     *
      * @param int     $post_id The post ID.
      * @param WP_Post $post The post object.
      * @param bool    $update Whether this is an existing post being updated or not.

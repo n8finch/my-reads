@@ -36,53 +36,38 @@ class MyReads_CPT {
 
     /**
      * Inject the raw content of a wp_block into new 'myreads' posts.
+     *
+     * @param string $content
+     * @param object $post
+     *
+     * @return string
      */
     public function inject_detached_pattern_content( $content, $post ) {
-      // echo '<pre>';
-      // var_dump( $post->post_content );
-      // wp_die();
+        // echo '<pre>';
+        // var_dump( $post->post_content );
+        // wp_die();
         if ( $post->post_type !== 'myreads' && ! empty( $post->post_content ) ) {
-          return $content;
+            return $content;
         }
-        
+
         $default_pattern = get_option( 'myreads_default_pattern', 'my-reads-default' );
-        
+
         // If no custom pattern is set, or if the default pattern is selected, return the original content (which will be the default pattern).
         if ( ! $default_pattern || $default_pattern === 'my-reads-default' ) {
-          return file_get_contents( MYREADS_PATH . '/patterns/my-reads-default.php' ) ?? $content;
+            return file_get_contents( MYREADS_PATH . '/patterns/my-reads-default.php' ) ?? $content;
         }
-          
+
         // 1. Fetch the User-Created Pattern by ID (or slug)
         $pattern_post = get_page_by_path( $default_pattern, OBJECT, 'wp_block' );
-        
+
         // Check if the pattern post exists and is of the correct post type.
         if ( $pattern_post && 'wp_block' === $pattern_post->post_type ) {
-          // Return the raw block HTML. 
-          return $pattern_post->post_content;
+            // Return the raw block HTML.
+            return $pattern_post->post_content;
         }
 
-        
+
         return $content;
-    }
-
-    public function get_default_pattern() {
-        // $default_pattern = get_option( 'myreads_default_pattern', 'my-reads-default' );
-
-        // if ( $default_pattern && $default_pattern !== 'my-reads-default' ) {
-        //   // Get post content by slug
-        //   $pattern_post = get_page_by_path( $default_pattern, OBJECT, 'wp_block' );
-        //   if ( get_class( $pattern_post ) === 'WP_Post' ) {
-        //       return [ [ 'core/block', [ 'ref' => $pattern_post->ID ] ] ];
-        //   }
-        // }
-        return [
-            [
-                'core/pattern',
-                [
-                    'slug' => 'my-reads/my-reads-default',
-                ],
-            ],
-        ];
     }
 
     /**
@@ -126,7 +111,6 @@ class MyReads_CPT {
             'show_in_rest' => true,
             'show_ui' => true,
             'supports' => [ 'title', 'editor', 'excerpt', 'comments', 'revisions', 'help', 'custom-fields', 'thumbnail' ],
-            // 'template' => $this->get_default_pattern()
         ];
 
         // add a filter for customizing post types from a child theme or plugin
