@@ -366,6 +366,7 @@ class MyReads_Settings {
             <ol>
               <li><?php printf( __( 'Create a new pattern in the <a href="%s">Patterns directory</a>', 'my-reads' ), esc_url( admin_url( '/site-editor.php?p=/pattern' ) ) )?></li>
               <li><?php printf( __( 'Add it to the "My Reads" category (otherwise you will not be able to select it here)', 'my-reads' ), esc_url( admin_url( '/site-editor.php?p=/pattern' ) ) )?></li>
+              <li><?php printf( __( 'Toggle off the "Synced" option', 'my-reads' ), esc_url( admin_url( '/site-editor.php?p=/pattern' ) ) )?></li>
               <li><?php printf( __( 'Select the pattern you created here', 'my-reads' ), esc_url( admin_url( '/site-editor.php?p=/pattern' ) ) )?></li>
             </ol>
           </p>

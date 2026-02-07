@@ -65,9 +65,12 @@ Yes please! If you have a use case, please don't hesitate to reach out in the fo
 
 == Screenshots ==
 1. A screenshot of a single post display.
-2. Select a custom pattern as the default for new reads.
+2. A listing view of the bookshelf.
+3. Select a custom pattern as the default for new reads.
 
 == Changelog ==
+= 1.0.2 =
+- Add context to custom settings.
 = 1.0.1 =
 - Add default pattern selector to settings
 - Update author block to be usable in a pattern
