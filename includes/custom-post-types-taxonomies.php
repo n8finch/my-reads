@@ -43,9 +43,6 @@ class MyReads_CPT {
      * @return string
      */
     public function inject_detached_pattern_content( $content, $post ) {
-        // echo '<pre>';
-        // var_dump( $post->post_content );
-        // wp_die();
         if ( $post->post_type !== 'myreads' && ! empty( $post->post_content ) ) {
             return $content;
         }
