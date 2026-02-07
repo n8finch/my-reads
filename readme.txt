@@ -5,7 +5,7 @@ Donate link: http://n8finch.com/coffee
 Requires at least: 6.7
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,8 +65,12 @@ Yes please! If you have a use case, please don't hesitate to reach out in the fo
 
 == Screenshots ==
 1. A screenshot of a single post display.
+2. Select a custom pattern as the default for new reads.
 
 == Changelog ==
+= 1.0.1 =
+- Add default pattern selector to settings
+- Update author block to be usable in a pattern
 = 1.0.0 =
 - Update to v.1.0.0
 - Add helper text to Amazon URL field
