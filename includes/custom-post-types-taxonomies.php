@@ -43,7 +43,8 @@ class MyReads_CPT {
      * @return string
      */
     public function inject_detached_pattern_content( $content, $post ) {
-        if ( $post->post_type !== 'myreads' && ! empty( $post->post_content ) ) {
+
+        if ( $post->post_type !== 'myreads' || ! empty( $post->post_content ) ) {
             return $content;
         }
 
