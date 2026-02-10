@@ -5,7 +5,7 @@ Donate link: http://n8finch.com/coffee
 Requires at least: 6.7
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,7 +70,8 @@ Yes please! If you have a use case, please don't hesitate to reach out in the fo
 
 == Changelog ==
 = 1.0.2 =
-- Add context to custom settings.
+- Add context to custom settings
+- Fix bug with default pattern showing up on other post types
 = 1.0.1 =
 - Add default pattern selector to settings
 - Update author block to be usable in a pattern
