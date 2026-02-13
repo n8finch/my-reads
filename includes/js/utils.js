@@ -21,6 +21,12 @@ export const getRatingEmojis = (rating, ratingStyle) => {
 };
 
 export const getFormatAndEmoji = (format) => {
+  // Make sure format is valid and return corresponding emoji and label
+  const options = ['book', 'audiobook', 'comicbook', 'article'];
+  if (!options.includes(format)) {
+    return __('Other', 'my-reads'); // Default to 'book' if format is invalid
+  }
+
   const formatOptions = {
     book: {
       icon: '📖',
@@ -42,5 +48,5 @@ export const getFormatAndEmoji = (format) => {
   if (!format) {
     return formatOptions.book.icon + ' ' + formatOptions.book.label; // Default to 'book' if no format is set
   }
-  return formatOptions[format].icon + ' ' + formatOptions[format].label;
+  return formatOptions[format]?.icon + ' ' + formatOptions[format]?.label;
 };
