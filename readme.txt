@@ -5,7 +5,7 @@ Donate link: http://n8finch.com/coffee
 Requires at least: 6.7
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,8 @@ Yes please! If you have a use case, please don't hesitate to reach out in the fo
 3. Select a custom pattern as the default for new reads.
 
 == Changelog ==
+= 1.0.3 =
+- Fix bug with formatting selection if post meta is missing or invalid
 = 1.0.2 =
 - Add context to custom settings
 - Fix bug with default pattern showing up on other post types
