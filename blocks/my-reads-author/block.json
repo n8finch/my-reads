@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "my-reads/author",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"title": "My Reads Author",
 	"category": "my-reads",
 	"icon": "edit",
