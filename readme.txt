@@ -69,6 +69,8 @@ Yes please! If you have a use case, please don't hesitate to reach out in the fo
 3. Select a custom pattern as the default for new reads.
 
 == Changelog ==
+= 1.0.4 =
+- Fix bug with author and template import
 = 1.0.3 =
 - Fix bug with formatting selection if post meta is missing or invalid
 = 1.0.2 =
