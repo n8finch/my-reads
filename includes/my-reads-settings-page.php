@@ -127,13 +127,29 @@ class MyReads_Settings {
     }
 
     public function generate_post_content( $author ) {
-        // Get the my-reads-default.php pattern content
-        ob_start();
-        include MYREADS_PATH . '/patterns/my-reads-default.php';
-        $content = ob_get_clean();
-        // Replace the placeholder with the actual author name
-        $content = str_replace( 'Author:', "Author: $author", $content );
-        return $content;
+        // Get the selected pattern from the settings
+        $selected_pattern = get_option( 'myreads_default_pattern', 'my-reads-default' );
+
+        // If the default pattern is selected, return a simple placeholder content
+        if ( $selected_pattern === 'my-reads-default' ) {
+            // Get the my-reads-default.php pattern content
+            ob_start();
+            include MYREADS_PATH . '/patterns/my-reads-default.php';
+            $content = ob_get_clean();
+            // Replace the placeholder with the actual author name
+            // $content = str_replace( 'Author:', "Author: $author", $content );
+            return $content;
+        }
+
+        // Load the pattern content
+        $pattern_post = get_page_by_path( $selected_pattern, OBJECT, 'wp_block' );
+        if ( $pattern_post ) {
+            $pattern_content = $pattern_post->post_content;
+            // Replace the placeholder with the actual author name
+            $pattern_content = str_replace( '{{author}}', esc_html( $author ), $pattern_content );
+            return $pattern_content;
+        }
+        return '';
     }
 
     public function import_myreads_csv( $file ) {
@@ -176,6 +192,9 @@ class MyReads_Settings {
             if ( ! is_wp_error( $post_id ) ) {
                 // Add format meta
                 update_post_meta( $post_id, '_myreads_format', sanitize_text_field( $format ) );
+
+                // Add author meta
+                update_post_meta( $post_id, '_myreads_author', sanitize_text_field( $author ) );
 
                 // Add rating meta
                 update_post_meta( $post_id, '_myreads_rating', sanitize_text_field( $rating ) );
